@@ -21,8 +21,8 @@ public class Taxi {
 	private PGpoint position;
 	private State actualState;
 	private State futureState;
-	private Set<Travel> travelMades;
-	private Set<FutureTravel> travels;
+//	private Set<Travel> travels;
+//	private Set<FutureTravel> futureTravels;
 	//private Alert alert;
 	private Client client;
 	
@@ -71,23 +71,23 @@ public class Taxi {
 		this.futureState = futureState;
 	}
 
-	@OneToMany(mappedBy = "taxi")
-	public Set<Travel> getTravelMades() {
-		return travelMades;
-	}
-
-	public void setTravelMades(Set<Travel> travelMades) {
-		this.travelMades = travelMades;
-	}
-
-	@OneToMany(mappedBy = "taxi")
-	public Set<FutureTravel> getTravels() {
-		return travels;
-	}
-
-	public void setTravels(Set<FutureTravel> travels) {
-		this.travels = travels;
-	}
+//	@OneToMany(mappedBy = "taxi")
+//	public Set<Travel> getTravels() {
+//		return travels;
+//	}
+//
+//	public void setTravels(Set<Travel> travels) {
+//		this.travels = travels;
+//	}
+//
+//	@OneToMany(mappedBy = "taxi")
+//	public Set<FutureTravel> getFutureTravels() {
+//		return futureTravels;
+//	}
+//
+//	public void setFutureTravels(Set<FutureTravel> futureTravels) {
+//		this.futureTravels = futureTravels;
+//	}
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client")

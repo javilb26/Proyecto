@@ -19,9 +19,12 @@ public interface TaxiService {
 	public Taxi login(Long id, String password, boolean passwordIsEncrypted)
 			throws InstanceNotFoundException, IncorrectPasswordException;
 
-	public void updateStatesTaxi(Long id, State actualState, State futureState)
+	public void updateActualStateTaxi(Long id, State actualState)
 			throws InstanceNotFoundException;
 
+	public void updateFutureStateTaxi(Long id, State futureState)
+			throws InstanceNotFoundException;
+	
 	public List<Taxi> getTaxis();
 
 	public Taxi getTaxiById(Long id) throws InstanceNotFoundException;

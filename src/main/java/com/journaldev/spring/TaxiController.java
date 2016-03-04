@@ -20,6 +20,7 @@ import com.journaldev.spring.service.TaxiService;
 public class TaxiController {
 	
 	private TaxiService taxiService;
+	Taxi taxi = new Taxi();
 	
 	@Autowired(required=true)
 	@Qualifier(value="taxiService")
@@ -35,7 +36,7 @@ public class TaxiController {
 	}
 	
 	@RequestMapping(value= "/taxi/add", method = RequestMethod.POST)
-	public String createTaxi(@ModelAttribute("taxi") Taxi taxi) throws InstanceNotFoundException{
+	public String createTaxi(@ModelAttribute("taxi") Taxi taxi) throws InstanceNotFoundException, IncorrectPasswordException{
 		if(taxi.getTaxiId() == 0){
 			if (taxi.getActualState()==null) {
 				taxi.setActualState(State.OFF);
@@ -45,7 +46,9 @@ public class TaxiController {
 			}
 			this.taxiService.createTaxi(taxi);
 		}else{
-			this.taxiService.updateStatesTaxi(taxi.getTaxiId(), taxi.getActualState(), taxi.getFutureState());
+			this.taxiService.updateActualStateTaxi(taxi.getTaxiId(), taxi.getActualState());
+			this.taxiService.updateFutureStateTaxi(taxi.getTaxiId(), taxi.getFutureState());
+//			this.taxiService.changePassword(taxi.getTaxiId(), this.taxiService.getTaxiById(taxi.getTaxiId()).getPassword(), taxi.getPassword());
 		}
 		return "redirect:/taxis";
 	}
@@ -63,10 +66,23 @@ public class TaxiController {
         return "taxi";
     }
 	
-    @RequestMapping("/login")
-    public String loginTaxi(@ModelAttribute("taxi") Taxi taxi) throws InstanceNotFoundException, IncorrectPasswordException{
-    	boolean passwordIsEncrypted = false;
-        this.taxiService.login(taxi.getTaxiId(), taxi.getPassword(), passwordIsEncrypted);
+//    @RequestMapping("/login")
+//    public String loginTaxi(@ModelAttribute("taxi") Taxi taxi) throws InstanceNotFoundException, IncorrectPasswordException{
+//    	boolean passwordIsEncrypted = false;
+//        this.taxiService.login(taxi.getTaxiId(), taxi.getPassword(), passwordIsEncrypted);
+//        return "taxi";
+//    }
+    
+    @RequestMapping(value = "/login/{taxiId}/{password}", method = RequestMethod.GET, produces = "application/json")
+    public Taxi loginTaxi(@PathVariable Long taxiId, @PathVariable String password) throws InstanceNotFoundException, IncorrectPasswordException{
+		boolean passwordIsEncrypted = false;
+		taxi = this.taxiService.login(taxiId, password, passwordIsEncrypted);
+      	return taxi;
+    }
+    
+    @RequestMapping("/password")
+    public String changePasswordTaxi(@ModelAttribute("taxi") Taxi taxi) throws InstanceNotFoundException, IncorrectPasswordException{
+        this.taxiService.changePassword(taxi.getTaxiId(), this.taxiService.getTaxiById(taxi.getTaxiId()).getPassword(), taxi.getPassword());
         return "taxi";
     }
     

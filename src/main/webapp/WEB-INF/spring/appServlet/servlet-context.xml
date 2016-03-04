@@ -45,11 +45,11 @@
 				<beans:value>com.journaldev.spring.model.Client</beans:value>
 				<beans:value>com.journaldev.spring.model.Country</beans:value>
 				<beans:value>com.journaldev.spring.model.Entry</beans:value>
+				<beans:value>com.journaldev.spring.model.FutureTravel</beans:value>
 				<beans:value>com.journaldev.spring.model.Region</beans:value>
 				<beans:value>com.journaldev.spring.model.Stand</beans:value>
 				<beans:value>com.journaldev.spring.model.Taxi</beans:value>
 				<beans:value>com.journaldev.spring.model.Travel</beans:value>
-				<beans:value>com.journaldev.spring.model.TravelMade</beans:value>
 				<beans:value>com.journaldev.spring.model.Zone</beans:value>
 			</beans:list>
 		</beans:property>

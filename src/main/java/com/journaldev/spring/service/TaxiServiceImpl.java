@@ -88,10 +88,17 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
-	public void updateStatesTaxi(Long id, State actualState, State futureState)
+	public void updateActualStateTaxi(Long id, State actualState)
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(id);
 		taxi.setActualState(actualState);
+		this.taxiDao.save(taxi);
+	}
+	
+	@Override
+	public void updateFutureStateTaxi(Long id, State futureState)
+			throws InstanceNotFoundException {
+		Taxi taxi = taxiDao.find(id);
 		taxi.setFutureState(futureState);
 		this.taxiDao.save(taxi);
 	}
