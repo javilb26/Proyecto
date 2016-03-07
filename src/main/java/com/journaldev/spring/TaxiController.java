@@ -1,5 +1,7 @@
 package com.journaldev.spring;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.journaldev.spring.dao.util.InstanceNotFoundException;
+import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.service.IncorrectPasswordException;
@@ -74,8 +77,19 @@ public class TaxiController {
       	return taxi;
     }
     
-    @RequestMapping(value = "/taxi/{taxiId}/state/{state}", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = "/country", method = RequestMethod.GET, produces = "application/json")
+    public List<Country> getCountries() {
+    	return this.taxiService.getCountries();
+    }
+    
+    @RequestMapping(value = "/taxi/{taxiId}/actualstate/{state}", method = RequestMethod.PUT, produces = "application/json")
     public void updateActualStateTaxi(@PathVariable("taxiId") Long taxiId, @PathVariable("state") String state) throws InstanceNotFoundException {
     	this.taxiService.updateActualStateTaxi(taxiId, State.valueOf(state.toUpperCase()));
     }
+    
+    @RequestMapping(value = "/taxi/{taxiId}/futurestate/{state}", method = RequestMethod.PUT, produces = "application/json")
+    public void updateFutureStateTaxi(@PathVariable("taxiId") Long taxiId, @PathVariable("state") String state) throws InstanceNotFoundException {
+    	this.taxiService.updateFutureStateTaxi(taxiId, State.valueOf(state.toUpperCase()));
+    }
+    
 }

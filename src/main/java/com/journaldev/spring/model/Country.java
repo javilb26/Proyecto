@@ -3,6 +3,7 @@ package com.journaldev.spring.model;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +17,7 @@ public class Country {
 	private long countryId;
 	private String name;
 	private PGpolygon location;
-	private Set<Region> regions;
+	//private Set<Region> regions;
 	
 	public Country() {
 	}
@@ -47,13 +48,13 @@ public class Country {
 		this.location = location;
 	}
 
-	@OneToMany(mappedBy = "country")
-	public Set<Region> getRegions() {
-		return regions;
-	}
-
-	public void setRegions(Set<Region> regions) {
-		this.regions = regions;
-	}
+//	@OneToMany(mappedBy = "country")
+//	public Set<Region> getRegions() {
+//		return regions;
+//	}
+//
+//	public void setRegions(Set<Region> regions) {
+//		this.regions = regions;
+//	}
 
 }
