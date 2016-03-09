@@ -17,6 +17,7 @@ import org.postgresql.geometric.PGline;
 public class Address {
 
 	private long addressId;
+	private String code;
 	private String name;
 	private PGline location;
 	private City city;
@@ -33,6 +34,14 @@ public class Address {
 
 	public void setAddressId(long addressId) {
 		this.addressId = addressId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getName() {

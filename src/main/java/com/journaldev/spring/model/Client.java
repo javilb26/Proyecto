@@ -20,10 +20,10 @@ import org.postgresql.geometric.PGpoint;
 public class Client {
 
 	private long clientId;
-	private Country country;
-	private Region region;
-	private City city;
-	private Address address;
+	private Country originCountry;
+	private Region originRegion;
+	private City originCity;
+	private Address originAddress;
 	private Country destinationCountry;
 	private Region destinationRegion;
 	private City destinationCity;
@@ -45,43 +45,43 @@ public class Client {
 	}
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "country")
-	public Country getCountry() {
-		return country;
+	@JoinColumn(name = "originCountry")
+	public Country getOriginCountry() {
+		return originCountry;
 	}
 
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "region")
-	public Region getRegion() {
-		return region;
-	}
-
-	public void setRegion(Region region) {
-		this.region = region;
+	public void setOriginCountry(Country originCountry) {
+		this.originCountry = originCountry;
 	}
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "city")
-	public City getCity() {
-		return city;
+	@JoinColumn(name = "originRegion")
+	public Region getOriginRegion() {
+		return originRegion;
 	}
 
-	public void setCity(City city) {
-		this.city = city;
+	public void setOriginRegion(Region originRegion) {
+		this.originRegion = originRegion;
 	}
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "address")
-	public Address getAddress() {
-		return address;
+	@JoinColumn(name = "originCity")
+	public City getOriginCity() {
+		return originCity;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setOriginCity(City originCity) {
+		this.originCity = originCity;
+	}
+
+	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@JoinColumn(name = "originAddress")
+	public Address getOriginAddress() {
+		return originAddress;
+	}
+
+	public void setOriginAddress(Address originAddress) {
+		this.originAddress = originAddress;
 	}
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)

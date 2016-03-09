@@ -15,8 +15,8 @@ import org.postgresql.geometric.PGpolygon;
 public class Country {
 
 	private long countryId;
+	private String code;
 	private String name;
-	private PGpolygon location;
 	//private Set<Region> regions;
 	
 	public Country() {
@@ -32,20 +32,20 @@ public class Country {
 		this.countryId = countryId;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public PGpolygon getLocation() {
-		return location;
-	}
-
-	public void setLocation(PGpolygon location) {
-		this.location = location;
 	}
 
 //	@OneToMany(mappedBy = "country")

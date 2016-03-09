@@ -29,14 +29,14 @@ public class CentralServiceImpl implements CentralService {
 	}
 
 	@Override
-	public void updateClient(Long id, Country country, Region region,
-			City city, Address address, Calendar entry, PGpoint location)
+	public void updateClient(Long id, Country originCountry, Region originRegion,
+			City originCity, Address originAddress, Calendar entry, PGpoint location)
 			throws InstanceNotFoundException {
 		Client client = clientDao.find(id);
-		client.setCountry(country);
-		client.setRegion(region);
-		client.setCity(city);
-		client.setAddress(address);
+		client.setOriginCountry(originCountry);
+		client.setOriginRegion(originRegion);
+		client.setOriginCity(originCity);
+		client.setOriginAddress(originAddress);
 		client.setEntry(entry);
 		client.setLocation(location);
 		this.clientDao.save(client);

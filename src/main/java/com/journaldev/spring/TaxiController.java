@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.journaldev.spring.dao.util.InstanceNotFoundException;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.service.IncorrectPasswordException;
@@ -80,6 +81,11 @@ public class TaxiController {
     @RequestMapping(value = "/country", method = RequestMethod.GET, produces = "application/json")
     public List<Country> getCountries() {
     	return this.taxiService.getCountries();
+    }
+    
+    @RequestMapping(value = "/country/{countryId}/region", method = RequestMethod.GET, produces = "application/json")
+    public List<Region> getRegions(@PathVariable("countryId") Long countryId) throws InstanceNotFoundException {
+    	return this.taxiService.getRegions(countryId);
     }
     
     @RequestMapping(value = "/taxi/{taxiId}/actualstate/{state}", method = RequestMethod.PUT, produces = "application/json")

@@ -17,10 +17,10 @@ import org.postgresql.geometric.PGpolygon;
 public class Region {
 
 	private long regionId;
+	private String code;
 	private String name;
-	private PGpolygon location;
 	private Country country;
-	private Set<City> cities;
+	//private Set<City> cities;
 	
 	public Region() {
 	}
@@ -35,20 +35,20 @@ public class Region {
 		this.regionId = regionId;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public PGpolygon getLocation() {
-		return location;
-	}
-
-	public void setLocation(PGpolygon location) {
-		this.location = location;
 	}
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
@@ -61,13 +61,13 @@ public class Region {
 		this.country = country;
 	}
 
-	@OneToMany(mappedBy = "region")
-	public Set<City> getCities() {
-		return cities;
-	}
-
-	public void setCities(Set<City> cities) {
-		this.cities = cities;
-	}
+//	@OneToMany(mappedBy = "region")
+//	public Set<City> getCities() {
+//		return cities;
+//	}
+//
+//	public void setCities(Set<City> cities) {
+//		this.cities = cities;
+//	}
 
 }

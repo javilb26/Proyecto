@@ -16,8 +16,8 @@ public interface CentralService {
 
 	public void createClient(Client client);
 
-	public void updateClient(Long id, Country country, Region region,
-			City city, Address address, Calendar entry, PGpoint location)
+	public void updateClient(Long id, Country originCountry, Region originRegion,
+			City originCity, Address originAddress, Calendar entry, PGpoint location)
 			throws InstanceNotFoundException;
 
 	public void removeClient(Long id) throws InstanceNotFoundException;

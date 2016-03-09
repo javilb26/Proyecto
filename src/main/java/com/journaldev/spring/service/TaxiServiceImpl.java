@@ -172,8 +172,8 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(id);
 		Client client = clientDao.find(clientId);
-		FutureTravel travel = new FutureTravel(Calendar.getInstance(), client.getCountry(),
-				client.getRegion(), client.getCity(), client.getAddress(),
+		FutureTravel travel = new FutureTravel(Calendar.getInstance(), client.getOriginCountry(),
+				client.getOriginRegion(), client.getOriginCity(), client.getOriginAddress(),
 				client.getDestinationCountry(), client.getDestinationRegion(),
 				client.getDestinationCity(), client.getDestinationAddress(),
 				taxi);
@@ -199,23 +199,5 @@ public class TaxiServiceImpl implements TaxiService {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
-
-	// @Override
-	// public void changeActualState(Long id, Long stateId)
-	// throws InstanceNotFoundException {
-	// Taxi taxi = taxiDao.find(id);
-	// State actualState = stateDao.find(stateId);
-	// taxi.setActualState(actualState);
-	// this.taxiDao.save(taxi);
-	// }
-	//
-	// @Override
-	// public void changeFutureState(Long id, Long stateId)
-	// throws InstanceNotFoundException {
-	// Taxi taxi = taxiDao.find(id);
-	// State futureState = stateDao.find(stateId);
-	// taxi.setFutureState(futureState);
-	// this.taxiDao.save(taxi);
-	// }
 
 }
