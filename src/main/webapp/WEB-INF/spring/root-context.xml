@@ -1,8 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="org.postgresql.Driver" />
+		<beans:property name="url"
+			value="jdbc:postgresql://localhost:5432/bd_postgis" />
+		<beans:property name="username" value="postgres" />
+		<beans:property name="password" value="postgres" />
+	</beans:bean>
+
+	<beans:bean id="dataSourceProxy"
+		class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<beans:property name="targetDataSource" ref="dataSource" />
+	</beans:bean>
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		
-</beans>
+	<beans:bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSourceProxy" />
+		<beans:property name="annotatedClasses">
+			<beans:list>
+				<beans:value>com.journaldev.spring.model.Address</beans:value>
+				<beans:value>com.journaldev.spring.model.City</beans:value>
+				<beans:value>com.journaldev.spring.model.Client</beans:value>
+				<beans:value>com.journaldev.spring.model.Country</beans:value>
+				<beans:value>com.journaldev.spring.model.Entry</beans:value>
+				<beans:value>com.journaldev.spring.model.FutureTravel</beans:value>
+				<beans:value>com.journaldev.spring.model.Region</beans:value>
+				<beans:value>com.journaldev.spring.model.Stand</beans:value>
+				<beans:value>com.journaldev.spring.model.Taxi</beans:value>
+				<beans:value>com.journaldev.spring.model.Travel</beans:value>
+				<beans:value>com.journaldev.spring.model.Zone</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect
+				</beans:prop>
+				<beans:prop key="hibernate.show_sql">true</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
+	</beans:bean>
+
+
+
+</beans:beans>

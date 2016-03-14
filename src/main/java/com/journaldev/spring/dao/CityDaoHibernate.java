@@ -16,7 +16,7 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Long>
 	public List<City> getCities(Long regionId) {
 		return getSession()
 				.createQuery(
-						"SELECT c FROM City c WHERE c.region = :regionId ORDER BY c.name")
+						"SELECT c FROM City c WHERE c.region.regionId = :regionId ORDER BY c.name")
 				.setParameter("regionId", regionId).list();
 	}
 

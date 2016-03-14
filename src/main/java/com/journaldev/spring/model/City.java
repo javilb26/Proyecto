@@ -1,5 +1,6 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ public class City {
 	private String name;
 	private PGpolygon location;
 	private Region region;
-	private Set<Address> addresses;
+	private Set<Address> addresses = new HashSet<Address>();
 	
 	public City() {
 	}

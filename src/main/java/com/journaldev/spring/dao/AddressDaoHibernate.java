@@ -16,7 +16,7 @@ public class AddressDaoHibernate extends GenericDaoHibernate<Address, Long>
 	public List<Address> getAddresses(Long cityId) {
 		return getSession()
 				.createQuery(
-						"SELECT a FROM Address a WHERE a.city = :cityId ORDER BY a.name")
+						"SELECT a FROM Address a WHERE a.city.cityId = :cityId ORDER BY a.name")
 				.setParameter("cityId", cityId).list();
 	}
 

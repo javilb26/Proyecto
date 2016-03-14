@@ -1,23 +1,21 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.postgresql.geometric.PGpolygon;
-
 @Entity
 public class Country {
-
+	
 	private long countryId;
 	private String code;
 	private String name;
-	//private Set<Region> regions;
+	private Set<Region> regions = new HashSet<Region>();
 	
 	public Country() {
 	}
@@ -48,13 +46,13 @@ public class Country {
 		this.name = name;
 	}
 
-//	@OneToMany(mappedBy = "country")
-//	public Set<Region> getRegions() {
-//		return regions;
-//	}
-//
-//	public void setRegions(Set<Region> regions) {
-//		this.regions = regions;
-//	}
+	@OneToMany(mappedBy = "country")
+	public Set<Region> getRegions() {
+		return regions;
+	}
+
+	public void setRegions(Set<Region> regions) {
+		this.regions = regions;
+	}
 
 }

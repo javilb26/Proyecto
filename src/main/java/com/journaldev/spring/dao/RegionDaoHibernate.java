@@ -16,7 +16,7 @@ public class RegionDaoHibernate extends GenericDaoHibernate<Region, Long>
 	public List<Region> getRegions(Long countryId) {
 		return getSession()
 				.createQuery(
-						"SELECT r FROM Region r WHERE r.country = :countryId ORDER BY r.name")
+						"SELECT r FROM Region r WHERE r.country.countryId = :countryId ORDER BY r.name")
 				.setParameter("countryId", countryId).list();
 	}
 

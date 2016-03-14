@@ -1,5 +1,6 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -17,11 +18,10 @@ import org.postgresql.geometric.PGline;
 public class Address {
 
 	private long addressId;
-	private String code;
 	private String name;
 	private PGline location;
 	private City city;
-	private Set<Stand> stands;
+	//private Set<Stand> stands = new HashSet<Stand>();
 	
 	public Address() {
 	}
@@ -34,14 +34,6 @@ public class Address {
 
 	public void setAddressId(long addressId) {
 		this.addressId = addressId;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getName() {
@@ -70,13 +62,13 @@ public class Address {
 		this.city = city;
 	}
 
-	@OneToMany(mappedBy = "address")
-	public Set<Stand> getStands() {
-		return stands;
-	}
-
-	public void setStands(Set<Stand> stands) {
-		this.stands = stands;
-	}
+//	@OneToMany(mappedBy = "address")
+//	public Set<Stand> getStands() {
+//		return stands;
+//	}
+//
+//	public void setStands(Set<Stand> stands) {
+//		this.stands = stands;
+//	}
 
 }
