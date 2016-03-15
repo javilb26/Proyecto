@@ -35,8 +35,29 @@ public class Travel {
 	private PGpoint destinationPoint;
 	private PGline path;
 	private Taxi taxi;
-	
+
 	public Travel() {
+	}
+
+	public Travel(Calendar date, Country originCountry, Region originRegion,
+			City originCity, Address originAddress, Country destinationCountry,
+			Region destinationRegion, City destinationCity,
+			Address destinationAddress, double distance, PGpoint originPoint,
+			PGpoint destinationPoint, PGline path, Taxi taxi) {
+		this.date = date;
+		this.originCountry = originCountry;
+		this.originRegion = originRegion;
+		this.originCity = originCity;
+		this.originAddress = originAddress;
+		this.destinationCountry = destinationCountry;
+		this.destinationRegion = destinationRegion;
+		this.destinationCity = destinationCity;
+		this.destinationAddress = destinationAddress;
+		this.distance = distance;
+		this.originPoint = originPoint;
+		this.destinationPoint = destinationPoint;
+		this.path = path;
+		this.taxi = taxi;
 	}
 
 	@Id
@@ -58,7 +79,7 @@ public class Travel {
 		this.date = date;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "originCountry")
 	public Country getOriginCountry() {
 		return originCountry;
@@ -68,7 +89,7 @@ public class Travel {
 		this.originCountry = originCountry;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "originRegion")
 	public Region getOriginRegion() {
 		return originRegion;
@@ -78,7 +99,7 @@ public class Travel {
 		this.originRegion = originRegion;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "originCity")
 	public City getOriginCity() {
 		return originCity;
@@ -88,7 +109,7 @@ public class Travel {
 		this.originCity = originCity;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "originAddress")
 	public Address getOriginAddress() {
 		return originAddress;
@@ -98,7 +119,7 @@ public class Travel {
 		this.originAddress = originAddress;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "destinationCountry")
 	public Country getDestinationCountry() {
 		return destinationCountry;
@@ -108,7 +129,7 @@ public class Travel {
 		this.destinationCountry = destinationCountry;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "destinationRegion")
 	public Region getDestinationRegion() {
 		return destinationRegion;
@@ -118,7 +139,7 @@ public class Travel {
 		this.destinationRegion = destinationRegion;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "destinationCity")
 	public City getDestinationCity() {
 		return destinationCity;
@@ -128,7 +149,7 @@ public class Travel {
 		this.destinationCity = destinationCity;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "destinationAddress")
 	public Address getDestinationAddress() {
 		return destinationAddress;
@@ -170,7 +191,7 @@ public class Travel {
 		this.path = path;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	public Taxi getTaxi() {
 		return taxi;
 	}
@@ -178,5 +199,5 @@ public class Travel {
 	public void setTaxi(Taxi taxi) {
 		this.taxi = taxi;
 	}
-	
+
 }

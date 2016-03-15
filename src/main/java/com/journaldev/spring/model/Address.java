@@ -21,7 +21,7 @@ public class Address {
 	private String name;
 	private PGline location;
 	private City city;
-	//private Set<Stand> stands = new HashSet<Stand>();
+	private Set<Stand> stands = new HashSet<Stand>();
 	
 	public Address() {
 	}
@@ -62,13 +62,13 @@ public class Address {
 		this.city = city;
 	}
 
-//	@OneToMany(mappedBy = "address")
-//	public Set<Stand> getStands() {
-//		return stands;
-//	}
-//
-//	public void setStands(Set<Stand> stands) {
-//		this.stands = stands;
-//	}
+	@OneToMany(mappedBy = "address")
+	public Set<Stand> getStands() {
+		return stands;
+	}
+
+	public void setStands(Set<Stand> stands) {
+		this.stands = stands;
+	}
 
 }

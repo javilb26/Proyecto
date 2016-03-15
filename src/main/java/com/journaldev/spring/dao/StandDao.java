@@ -9,6 +9,6 @@ public interface StandDao extends GenericDao<Stand, Long> {
 	
 	public List<Stand> getStandsByZone(Long zoneId);
 	
-	public List<Stand> getStandsByTaxi(Long taxiId);
+	public List<Stand> getNearestStandsByTaxi(Long taxiId);
 	
 }

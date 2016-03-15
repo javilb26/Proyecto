@@ -1,5 +1,6 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -21,8 +22,8 @@ public class Taxi {
 	private PGpoint position;
 	private State actualState;
 	private State futureState;
-//	private Set<Travel> travels;
-//	private Set<FutureTravel> futureTravels;
+	private Set<Travel> travels = new HashSet<Travel>();
+	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
 	//private Alert alert;
 	private Client client;
 	
@@ -71,23 +72,23 @@ public class Taxi {
 		this.futureState = futureState;
 	}
 
-//	@OneToMany(mappedBy = "taxi")
-//	public Set<Travel> getTravels() {
-//		return travels;
-//	}
-//
-//	public void setTravels(Set<Travel> travels) {
-//		this.travels = travels;
-//	}
-//
-//	@OneToMany(mappedBy = "taxi")
-//	public Set<FutureTravel> getFutureTravels() {
-//		return futureTravels;
-//	}
-//
-//	public void setFutureTravels(Set<FutureTravel> futureTravels) {
-//		this.futureTravels = futureTravels;
-//	}
+	@OneToMany(mappedBy = "taxi")
+	public Set<Travel> getTravels() {
+		return travels;
+	}
+
+	public void setTravels(Set<Travel> travels) {
+		this.travels = travels;
+	}
+
+	@OneToMany(mappedBy = "taxi")
+	public Set<FutureTravel> getFutureTravels() {
+		return futureTravels;
+	}
+
+	public void setFutureTravels(Set<FutureTravel> futureTravels) {
+		this.futureTravels = futureTravels;
+	}
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client")

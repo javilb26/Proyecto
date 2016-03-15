@@ -2,6 +2,8 @@ package com.journaldev.spring;
 
 import java.util.List;
 
+import org.postgresql.geometric.PGline;
+import org.postgresql.geometric.PGpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
+import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.service.IncorrectPasswordException;
@@ -92,26 +95,14 @@ public class TaxiController {
 
 	@RequestMapping(value = "/country", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Country> getCountries() {
-		List<Country> countries = this.taxiService.getCountries();
-		// for(Country c : countries) {
-		// LOG.info("Pais encontrado: {}",c.getName());
-		// for(Region r : c.getRegions()) {
-		// LOG.info("\tRegion:{}", r.getName());
-		// }
-		// }
-		return countries;
+		return this.taxiService.getCountries();
 	}
 
 	@RequestMapping(value = "/country/{countryId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Region> getRegions(
 			@PathVariable("countryId") Long countryId)
 			throws InstanceNotFoundException {
-		List<Region> regions = this.taxiService.getRegions(countryId);
-		for (Region r : regions) {
-			LOG.info("\tRegion:{}", r.getName());
-		}
-
-		return regions;
+		return this.taxiService.getRegions(countryId);
 	}
 
 	@RequestMapping(value = "/region/{regionId}", method = RequestMethod.GET, produces = "application/json")
@@ -120,7 +111,7 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		return this.taxiService.getCities(regionId);
 	}
-	
+
 	@RequestMapping(value = "/city/{cityId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Address> getAddresses(
 			@PathVariable("cityId") Long cityId)
@@ -142,6 +133,38 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		this.taxiService.updateFutureStateTaxi(taxiId,
 				State.valueOf(state.toUpperCase()));
+	}
+
+	@RequestMapping(value = "/taxi/{taxiId}/standstaxi", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Stand> getNearestStandsByTaxi(
+			@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getNearestStandsByTaxi(taxiId);
+	}
+
+	@RequestMapping(value = "/taxi/{taxiId}/standszone", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Stand> getStandsByZone(
+			@PathVariable("zoneId") Long zoneId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getStandsByZone(zoneId);
+	}
+
+	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}", method = RequestMethod.PUT, produces = "application/json")
+	public void takeClientTo(@PathVariable("taxiId") Long taxiId,
+			@PathVariable("clientId") Long clientId)
+			throws InstanceNotFoundException {
+		this.taxiService.takeClientTo(taxiId, clientId);
+	}
+
+	@RequestMapping(value = "/arrival/{futureTravelId}", method = RequestMethod.PUT, produces = "application/json")
+	public void destinationReached(
+			@PathVariable("futureTravelId") Long futureTravelId,
+			@PathVariable("distance") double distance,
+			@PathVariable("originPoint") PGpoint originPoint,
+			@PathVariable("destinationPoint") PGpoint destinationPoint,
+			@PathVariable("path") PGline path)
+			throws InstanceNotFoundException {
+		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, path);
 	}
 
 }
