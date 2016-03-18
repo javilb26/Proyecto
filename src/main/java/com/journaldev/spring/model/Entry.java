@@ -14,12 +14,18 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Immutable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Immutable
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Entry {
 
 	private long entryId;
+	@JsonManagedReference
 	private Taxi taxi;
+	@JsonManagedReference
 	private Stand stand;
 	private Calendar arrival;
 	

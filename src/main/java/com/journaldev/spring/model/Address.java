@@ -12,15 +12,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.postgresql.geometric.PGline;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vividsolutions.jts.geom.MultiLineString;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Address {
 
 	private long addressId;
 	private String name;
-	private PGline location;
+	@JsonIgnore
+	private MultiLineString location;
+	@JsonManagedReference
 	private City city;
+	@JsonBackReference
 	private Set<Stand> stands = new HashSet<Stand>();
 	
 	public Address() {
@@ -44,11 +52,11 @@ public class Address {
 		this.name = name;
 	}
 
-	public PGline getLocation() {
+	public MultiLineString getLocation() {
 		return location;
 	}
 
-	public void setLocation(PGline location) {
+	public void setLocation(MultiLineString location) {
 		this.location = location;
 	}
 

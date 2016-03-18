@@ -12,15 +12,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.postgresql.geometric.PGpolygon;
+import org.hibernate.annotations.Immutable;
+
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@Immutable
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class City {
 
 	private long cityId;
 	private String name;
-	private PGpolygon location;
+	@JsonIgnore
+	private MultiPolygon location;
+	@JsonManagedReference
 	private Region region;
+	@JsonBackReference
 	private Set<Address> addresses = new HashSet<Address>();
 	
 	public City() {
@@ -44,11 +55,11 @@ public class City {
 		this.name = name;
 	}
 
-	public PGpolygon getLocation() {
+	public MultiPolygon getLocation() {
 		return location;
 	}
 
-	public void setLocation(PGpolygon location) {
+	public void setLocation(MultiPolygon location) {
 		this.location = location;
 	}
 

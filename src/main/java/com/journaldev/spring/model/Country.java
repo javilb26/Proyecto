@@ -9,12 +9,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Immutable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@Immutable
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Country {
 	
 	private long countryId;
 	private String code;
 	private String name;
+	@JsonBackReference
 	private Set<Region> regions = new HashSet<Region>();
 	
 	public Country() {

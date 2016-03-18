@@ -13,14 +13,22 @@ import javax.persistence.OneToMany;
 
 import org.postgresql.geometric.PGpoint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Stand {
 
 	private long standId;
 	private String name;
 	private PGpoint location;
+	@JsonManagedReference
 	private Zone zone;
+	@JsonManagedReference
 	private Address address;
+	@JsonBackReference
 	private Set<Entry> entries;
 	
 	public Stand() {

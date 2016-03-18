@@ -15,18 +15,30 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Immutable;
 import org.postgresql.geometric.PGpoint;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Immutable
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client {
 
 	private long clientId;
+	@JsonManagedReference
 	private Country originCountry;
+	@JsonManagedReference
 	private Region originRegion;
+	@JsonManagedReference
 	private City originCity;
+	@JsonManagedReference
 	private Address originAddress;
+	@JsonManagedReference
 	private Country destinationCountry;
+	@JsonManagedReference
 	private Region destinationRegion;
+	@JsonManagedReference
 	private City destinationCity;
+	@JsonManagedReference
 	private Address destinationAddress;
 	private Calendar entry;
 	private PGpoint location;

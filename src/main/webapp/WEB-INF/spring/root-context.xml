@@ -10,6 +10,7 @@
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="org.postgresql.Driver" />
+		<!-- <beans:property name="driverClassName" value="org.postgis.DriverWrapper" /> -->
 		<beans:property name="url"
 			value="jdbc:postgresql://localhost:5432/bd_postgis" />
 		<beans:property name="username" value="postgres" />
@@ -41,7 +42,7 @@
 		</beans:property>
 		<beans:property name="hibernateProperties">
 			<beans:props>
-				<beans:prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect
+				<beans:prop key="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect
 				</beans:prop>
 				<beans:prop key="hibernate.show_sql">true</beans:prop>
 			</beans:props>

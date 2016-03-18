@@ -1,5 +1,6 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -10,13 +11,18 @@ import javax.persistence.OneToMany;
 
 import org.postgresql.geometric.PGpolygon;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Zone {
 
 	private long zoneId;
 	private String name;
 	private PGpolygon location;
-	private Set<Stand> stands;
+	@JsonBackReference
+	private Set<Stand> stands = new HashSet<Stand>();
 	
 	public Zone() {
 	}
