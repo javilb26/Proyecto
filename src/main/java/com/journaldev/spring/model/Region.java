@@ -26,7 +26,8 @@ public class Region {
 	private Long regionId;
 	private String code;
 	private String name;
-	@JsonManagedReference
+	//@JsonManagedReference
+	@JsonBackReference
 	private Country country;
 	@JsonBackReference
 	private Set<City> cities = new HashSet<City>();

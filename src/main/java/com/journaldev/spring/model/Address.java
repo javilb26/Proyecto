@@ -26,7 +26,8 @@ public class Address {
 	private String name;
 	@JsonIgnore
 	private MultiLineString location;
-	@JsonManagedReference
+	//@JsonManagedReference
+	@JsonBackReference
 	private City city;
 	@JsonBackReference
 	private Set<Stand> stands = new HashSet<Stand>();

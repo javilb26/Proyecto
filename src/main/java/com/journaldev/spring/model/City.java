@@ -29,7 +29,8 @@ public class City {
 	private String name;
 	@JsonIgnore
 	private MultiPolygon location;
-	@JsonManagedReference
+	//@JsonManagedReference
+	@JsonBackReference
 	private Region region;
 	@JsonBackReference
 	private Set<Address> addresses = new HashSet<Address>();
