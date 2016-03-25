@@ -204,31 +204,32 @@ public class TaxiServiceImpl implements TaxiService {
 				client.getOriginAddress(), country, region, city, address, taxi);
 		this.futureTravelDao.save(travel);
 		
-		//TODO no
+		//TODO no setea el cliente
+		taxi.setActualState(State.BUSY);
 		taxi.setClient(client);
 		this.taxiDao.save(taxi);
 	}
 
 	@Override
-	public void destinationReached(Long futureTravelId, double distance,
-			PGpoint originPoint, PGpoint destinationPoint, PGline path)
+	public void destinationReached(Long futureTravelId, double distance)
+			//PGpoint originPoint, PGpoint destinationPoint, PGline path)
 			throws InstanceNotFoundException {
-		/*
+		
 		FutureTravel futureTravel = futureTravelDao.find(futureTravelId);
 		Taxi taxi = taxiDao.find(futureTravel.getTaxi().getTaxiId());
 		taxi.setActualState(State.AVAILABLE);
 		Client client = taxi.getClient();
-		Travel travel = new Travel(client.getEntry(),
-				client.getOriginCountry(), client.getOriginRegion(),
-				client.getOriginCity(), client.getOriginAddress(),
-				client.getDestinationCountry(), client.getDestinationRegion(),
-				client.getDestinationCity(), client.getDestinationAddress(),
-				distance, originPoint, destinationPoint, path, taxi);
+		Travel travel = new Travel(futureTravel.getDate(),
+				futureTravel.getOriginCountry(), futureTravel.getOriginRegion(),
+				futureTravel.getOriginCity(), futureTravel.getOriginAddress(),
+				futureTravel.getDestinationCountry(), futureTravel.getDestinationRegion(),
+				futureTravel.getDestinationCity(), futureTravel.getDestinationAddress(),
+				distance, taxi);
 		travelDao.save(travel);
 		clientDao.remove(client.getClientId());
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
-		*/
+		
 	}
 
 }

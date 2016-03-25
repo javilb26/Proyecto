@@ -161,15 +161,15 @@ public class TaxiController {
 				cityId, addressId);
 	}
 
-	@RequestMapping(value = "/arrival/{futureTravelId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/arrival/{futureTravelId}/distance/{distance}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void destinationReached(
 			@PathVariable("futureTravelId") Long futureTravelId,
-			@PathVariable("distance") double distance,
+			@PathVariable("distance") double distance/*,
 			@PathVariable("originPoint") PGpoint originPoint,
 			@PathVariable("destinationPoint") PGpoint destinationPoint,
-			@PathVariable("path") PGline path) throws InstanceNotFoundException {
-		this.taxiService.destinationReached(futureTravelId, distance,
-				originPoint, destinationPoint, path);
+			@PathVariable("path") PGline path*/) throws InstanceNotFoundException {
+		this.taxiService.destinationReached(futureTravelId, distance
+				/*,originPoint, destinationPoint, path*/);
 	}
 
 }

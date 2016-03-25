@@ -42,6 +42,23 @@ public class Travel {
 	public Travel(Calendar date, Country originCountry, Region originRegion,
 			City originCity, Address originAddress, Country destinationCountry,
 			Region destinationRegion, City destinationCity,
+			Address destinationAddress, double distance, Taxi taxi) {
+		this.date = date;
+		this.originCountry = originCountry;
+		this.originRegion = originRegion;
+		this.originCity = originCity;
+		this.originAddress = originAddress;
+		this.destinationCountry = destinationCountry;
+		this.destinationRegion = destinationRegion;
+		this.destinationCity = destinationCity;
+		this.destinationAddress = destinationAddress;
+		this.distance = distance;
+		this.taxi = taxi;
+	}
+	
+	public Travel(Calendar date, Country originCountry, Region originRegion,
+			City originCity, Address originAddress, Country destinationCountry,
+			Region destinationRegion, City destinationCity,
 			Address destinationAddress, double distance, PGpoint originPoint,
 			PGpoint destinationPoint, PGline path, Taxi taxi) {
 		this.date = date;
@@ -192,6 +209,7 @@ public class Travel {
 	}
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "taxi")
 	public Taxi getTaxi() {
 		return taxi;
 	}
