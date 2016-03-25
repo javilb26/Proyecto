@@ -15,6 +15,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Immutable;
 import org.postgresql.geometric.PGpoint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -24,23 +26,16 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Client {
 
 	private long clientId;
-	@JsonManagedReference
+	@JsonBackReference
 	private Country originCountry;
-	@JsonManagedReference
+	@JsonBackReference
 	private Region originRegion;
-	@JsonManagedReference
+	@JsonBackReference
 	private City originCity;
-	@JsonManagedReference
+	@JsonBackReference
 	private Address originAddress;
-	@JsonManagedReference
-	private Country destinationCountry;
-	@JsonManagedReference
-	private Region destinationRegion;
-	@JsonManagedReference
-	private City destinationCity;
-	@JsonManagedReference
-	private Address destinationAddress;
 	private Calendar entry;
+	@JsonIgnore
 	private PGpoint location;
 
 	public Client() {
@@ -96,46 +91,6 @@ public class Client {
 		this.originAddress = originAddress;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "destinationCountry")
-	public Country getDestinationCountry() {
-		return destinationCountry;
-	}
-
-	public void setDestinationCountry(Country destinationCountry) {
-		this.destinationCountry = destinationCountry;
-	}
-
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "destinationRegion")
-	public Region getDestinationRegion() {
-		return destinationRegion;
-	}
-
-	public void setDestinationRegion(Region destinationRegion) {
-		this.destinationRegion = destinationRegion;
-	}
-
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "destinationCity")
-	public City getDestinationCity() {
-		return destinationCity;
-	}
-
-	public void setDestinationCity(City destinationCity) {
-		this.destinationCity = destinationCity;
-	}
-
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@JoinColumn(name = "destinationAddress")
-	public Address getDestinationAddress() {
-		return destinationAddress;
-	}
-
-	public void setDestinationAddress(Address destinationAddress) {
-		this.destinationAddress = destinationAddress;
-	}
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	public Calendar getEntry() {
 		return entry;

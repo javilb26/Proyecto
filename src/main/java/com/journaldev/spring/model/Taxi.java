@@ -14,6 +14,9 @@ import javax.persistence.OneToOne;
 
 import org.postgresql.geometric.PGpoint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Taxi {
 	
@@ -25,6 +28,7 @@ public class Taxi {
 	private Set<Travel> travels = new HashSet<Travel>();
 	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
 	//private Alert alert;
+	@JsonManagedReference
 	private Client client;
 	
 	public Taxi() {

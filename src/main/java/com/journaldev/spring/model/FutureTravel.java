@@ -14,21 +14,30 @@ import javax.persistence.TemporalType;
 
 import org.postgresql.geometric.PGpoint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class FutureTravel {
 
 	private long futureTravelId;
 	private Calendar date;
+	@JsonBackReference
 	private Country originCountry;
+	@JsonBackReference
 	private Region originRegion;
+	@JsonBackReference
 	private City originCity;
+	@JsonBackReference
 	private Address originAddress;
+	@JsonBackReference
 	private Country destinationCountry;
+	@JsonBackReference
 	private Region destinationRegion;
+	@JsonBackReference
 	private City destinationCity;
+	@JsonBackReference
 	private Address destinationAddress;
-	private double distance;
-	private PGpoint originPoint;
 	private Taxi taxi;
 	
 	public FutureTravel() {
@@ -149,23 +158,8 @@ public class FutureTravel {
 		this.destinationAddress = destinationAddress;
 	}
 
-	public double getDistance() {
-		return distance;
-	}
-
-	public void setDistance(double distance) {
-		this.distance = distance;
-	}
-
-	public PGpoint getOriginPoint() {
-		return originPoint;
-	}
-
-	public void setOriginPoint(PGpoint originPoint) {
-		this.originPoint = originPoint;
-	}
-
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@JoinColumn(name = "taxi")
 	public Taxi getTaxi() {
 		return taxi;
 	}

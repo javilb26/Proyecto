@@ -1,5 +1,6 @@
 package com.journaldev.spring.service;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.postgresql.geometric.PGline;
@@ -188,23 +189,31 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
-	public void takeClientTo(Long taxiId, Long clientId)
+	public void takeClientTo(Long taxiId, Long clientId, Long countryId,
+			Long regionId, Long cityId, Long addressId)
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		Client client = clientDao.find(clientId);
-		FutureTravel travel = new FutureTravel(client.getEntry(),
-				client.getOriginCountry(), client.getOriginRegion(),
-				client.getOriginCity(), client.getOriginAddress(),
-				client.getDestinationCountry(), client.getDestinationRegion(),
-				client.getDestinationCity(), client.getDestinationAddress(),
-				taxi);
+		Calendar now = Calendar.getInstance();
+		Country country = countryDao.find(countryId);
+		Region region = regionDao.find(regionId);
+		City city = cityDao.find(cityId);
+		Address address = addressDao.find(addressId);
+		FutureTravel travel = new FutureTravel(now, client.getOriginCountry(),
+				client.getOriginRegion(), client.getOriginCity(),
+				client.getOriginAddress(), country, region, city, address, taxi);
 		this.futureTravelDao.save(travel);
+		
+		//TODO no
+		taxi.setClient(client);
+		this.taxiDao.save(taxi);
 	}
 
 	@Override
 	public void destinationReached(Long futureTravelId, double distance,
 			PGpoint originPoint, PGpoint destinationPoint, PGline path)
 			throws InstanceNotFoundException {
+		/*
 		FutureTravel futureTravel = futureTravelDao.find(futureTravelId);
 		Taxi taxi = taxiDao.find(futureTravel.getTaxi().getTaxiId());
 		taxi.setActualState(State.AVAILABLE);
@@ -219,6 +228,7 @@ public class TaxiServiceImpl implements TaxiService {
 		clientDao.remove(client.getClientId());
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
+		*/
 	}
 
 }

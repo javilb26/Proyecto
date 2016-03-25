@@ -149,11 +149,16 @@ public class TaxiController {
 		return this.taxiService.getStandsByZone(zoneId);
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}/country/{countryId}/region/{regionId}/city/{cityId}/address/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void takeClientTo(@PathVariable("taxiId") Long taxiId,
-			@PathVariable("clientId") Long clientId)
+			@PathVariable("clientId") Long clientId,
+			@PathVariable("countryId") Long countryId,
+			@PathVariable("regionId") Long regionId,
+			@PathVariable("cityId") Long cityId,
+			@PathVariable("addressId") Long addressId)
 			throws InstanceNotFoundException {
-		this.taxiService.takeClientTo(taxiId, clientId);
+		this.taxiService.takeClientTo(taxiId, clientId, countryId, regionId,
+				cityId, addressId);
 	}
 
 	@RequestMapping(value = "/arrival/{futureTravelId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
@@ -162,9 +167,9 @@ public class TaxiController {
 			@PathVariable("distance") double distance,
 			@PathVariable("originPoint") PGpoint originPoint,
 			@PathVariable("destinationPoint") PGpoint destinationPoint,
-			@PathVariable("path") PGline path)
-			throws InstanceNotFoundException {
-		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, path);
+			@PathVariable("path") PGline path) throws InstanceNotFoundException {
+		this.taxiService.destinationReached(futureTravelId, distance,
+				originPoint, destinationPoint, path);
 	}
 
 }
