@@ -20,7 +20,7 @@ import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
 import com.vividsolutions.jts.geom.Point;
 
-@Service("CentralService")
+@Service("centralService")
 @Transactional
 public class CentralServiceImpl implements CentralService {
 

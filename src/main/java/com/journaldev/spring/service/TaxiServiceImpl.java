@@ -30,7 +30,7 @@ import com.journaldev.spring.model.Travel;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
-@Service("TaxiService")
+@Service("taxiService")
 @Transactional
 public class TaxiServiceImpl implements TaxiService {
 

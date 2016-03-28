@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Address;
 
-@Repository("AddressDao")
+@Repository("addressDao")
 public class AddressDaoHibernate extends GenericDaoHibernate<Address, Long>
 		implements AddressDao {
 
