@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Stand;
 
-@Repository("standDao")
+@Repository("StandDao")
 public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 		implements StandDao {
 

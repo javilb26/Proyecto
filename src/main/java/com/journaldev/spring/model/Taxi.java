@@ -3,6 +3,7 @@ package com.journaldev.spring.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,26 +13,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.postgresql.geometric.PGpoint;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.Point;
 
 @Entity
 public class Taxi {
 	
 	private long taxiId;
 	private String password;
-	private PGpoint position;
+	private Point position;
 	private State actualState;
 	private State futureState;
+	@JsonIgnore
 	private Set<Travel> travels = new HashSet<Travel>();
+	@JsonIgnore
 	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
+	//TODO Descomentar cuando necesite
 	//private Alert alert;
-	@JsonManagedReference
 	private Client client;
 	
 	public Taxi() {
+		this.actualState = State.OFF;
+		this.futureState = State.OFF;
 	}
 
 	@Id
@@ -51,12 +58,15 @@ public class Taxi {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public PGpoint getPosition() {
+	
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(Point,4326)")
+	public Point getPosition() {
 		return position;
 	}
 
-	public void setPosition(PGpoint position) {
+	public void setPosition(Point position) {
 		this.position = position;
 	}
 

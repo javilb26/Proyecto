@@ -3,16 +3,20 @@ package com.journaldev.spring.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.postgresql.geometric.PGpolygon;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.MultiPolygon;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -20,8 +24,8 @@ public class Zone {
 
 	private long zoneId;
 	private String name;
-	private PGpolygon location;
-	@JsonBackReference
+	private MultiPolygon location;
+	@JsonIgnore
 	private Set<Stand> stands = new HashSet<Stand>();
 	
 	public Zone() {
@@ -45,11 +49,14 @@ public class Zone {
 		this.name = name;
 	}
 
-	public PGpolygon getLocation() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(MultiPolygon,4326)")
+	public MultiPolygon getLocation() {
 		return location;
 	}
 
-	public void setLocation(PGpolygon location) {
+	public void setLocation(MultiPolygon location) {
 		this.location = location;
 	}
 

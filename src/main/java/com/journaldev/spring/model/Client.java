@@ -2,6 +2,7 @@ package com.journaldev.spring.model;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,12 +14,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Immutable;
-import org.postgresql.geometric.PGpoint;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.Point;
 
 @Entity
 @Immutable
@@ -26,19 +28,24 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Client {
 
 	private long clientId;
-	@JsonBackReference
 	private Country originCountry;
-	@JsonBackReference
 	private Region originRegion;
-	@JsonBackReference
 	private City originCity;
-	@JsonBackReference
 	private Address originAddress;
 	private Calendar entry;
-	@JsonIgnore
-	private PGpoint location;
+	private Point location;
 
 	public Client() {
+	}
+	
+	public Client(Country originCountry, Region originRegion, City originCity,
+			Address originAddress, Calendar entry, Point location) {
+		this.originCountry = originCountry;
+		this.originRegion = originRegion;
+		this.originCity = originCity;
+		this.originAddress = originAddress;
+		this.entry = entry;
+		this.location = location;
 	}
 
 	@Id
@@ -100,11 +107,14 @@ public class Client {
 		this.entry = entry;
 	}
 
-	public PGpoint getLocation() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(Point,4326)")
+	public Point getLocation() {
 		return location;
 	}
 
-	public void setLocation(PGpoint location) {
+	public void setLocation(Point location) {
 		this.location = location;
 	}
 

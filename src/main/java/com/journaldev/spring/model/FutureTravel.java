@@ -12,31 +12,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.postgresql.geometric.PGpoint;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class FutureTravel {
 
 	private long futureTravelId;
 	private Calendar date;
-	@JsonBackReference
 	private Country originCountry;
-	@JsonBackReference
 	private Region originRegion;
-	@JsonBackReference
 	private City originCity;
-	@JsonBackReference
 	private Address originAddress;
-	@JsonBackReference
 	private Country destinationCountry;
-	@JsonBackReference
 	private Region destinationRegion;
-	@JsonBackReference
 	private City destinationCity;
-	@JsonBackReference
 	private Address destinationAddress;
 	private Taxi taxi;
 	

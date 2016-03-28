@@ -2,8 +2,6 @@ package com.journaldev.spring;
 
 import java.util.List;
 
-import org.postgresql.geometric.PGline;
-import org.postgresql.geometric.PGpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.journaldev.spring.dao.util.InstanceNotFoundException;
 import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
+import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
-import com.journaldev.spring.service.IncorrectPasswordException;
+import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.Point;
 
 @RestController
 public class TaxiController {
 
 	private TaxiService taxiService;
-	Taxi taxi = new Taxi();
+	private CentralService centralService;
 
 	Logger LOG = LoggerFactory.getLogger(TaxiController.class);
 
@@ -40,56 +41,38 @@ public class TaxiController {
 		this.taxiService = taxiService;
 	}
 
+	@Autowired(required = true)
+	@Qualifier(value = "centralService")
+	public void setClientService(CentralService centralService) {
+		this.centralService = centralService;
+	}
+
 	@RequestMapping(value = "/taxi", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getTaxis() {
 		return this.taxiService.getTaxis();
 	}
 
-	//
-	// @RequestMapping(value= "/taxi/add", method = RequestMethod.POST)
-	// public String createTaxi(@ModelAttribute("taxi") Taxi taxi) throws
-	// InstanceNotFoundException, IncorrectPasswordException{
-	// if(taxi.getTaxiId() == 0){
-	// if (taxi.getActualState()==null) {
-	// taxi.setActualState(State.OFF);
-	// }
-	// if (taxi.getFutureState()==null) {
-	// taxi.setFutureState(State.OFF);
-	// }
-	// this.taxiService.createTaxi(taxi);
-	// }else{
-	// this.taxiService.updateActualStateTaxi(taxi.getTaxiId(),
-	// taxi.getActualState());
-	// this.taxiService.updateFutureStateTaxi(taxi.getTaxiId(),
-	// taxi.getFutureState());
-	// this.taxiService.changePassword(taxi.getTaxiId(),
-	// this.taxiService.getTaxiById(taxi.getTaxiId()).getPassword(),
-	// taxi.getPassword());
-	// }
-	// return "redirect:/taxis";
-	// }
-	//
-	// @RequestMapping("/remove/{id}")
-	// public String removeTaxi(@PathVariable("id") Long id) throws
-	// InstanceNotFoundException{
-	// this.taxiService.removeTaxi(id);
-	// return "redirect:/taxis";
-	// }
-	//
-	// @RequestMapping("/edit/{id}")
-	// public String editTaxi(@PathVariable("id") Long id, Model model) throws
-	// InstanceNotFoundException{
-	// model.addAttribute("taxi", this.taxiService.getTaxiById(id));
-	// model.addAttribute("getTaxis", this.taxiService.getTaxis());
-	// return "taxi";
-	// }
+	@RequestMapping(value = "/client", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody List<Client> getClients() {
+		return this.centralService.getClients();
+	}
+
+	@RequestMapping(value = "/taxi/add", method = RequestMethod.POST)
+	public void createTaxi() {
+		this.taxiService.createTaxi();
+	}
+
+	@RequestMapping(value = "/client/add", method = RequestMethod.PUT)
+	public void createClient() throws InstanceNotFoundException {
+		// TODO hardcodeados no
+		this.centralService.createClient(Long.valueOf(1), Long.valueOf(6),
+				Long.valueOf(6944), Long.valueOf(1639), null/*new Point(43.36, -8.41)*/);
+	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public Taxi login(@RequestBody Taxi input)
-			throws InstanceNotFoundException, IncorrectPasswordException {
-		boolean passwordIsEncrypted = false;
-		taxi = this.taxiService.login(input.getTaxiId(), input.getPassword(),
-				passwordIsEncrypted);
+	public Taxi login(@RequestBody Taxi input) throws InstanceNotFoundException {
+		Taxi taxi = this.taxiService.login(input.getTaxiId(),
+				input.getPassword());
 		return taxi;
 	}
 
@@ -161,15 +144,14 @@ public class TaxiController {
 				cityId, addressId);
 	}
 
-	@RequestMapping(value = "/arrival/{futureTravelId}/distance/{distance}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/arrival/{futureTravelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void destinationReached(
 			@PathVariable("futureTravelId") Long futureTravelId,
-			@PathVariable("distance") double distance/*,
-			@PathVariable("originPoint") PGpoint originPoint,
-			@PathVariable("destinationPoint") PGpoint destinationPoint,
-			@PathVariable("path") PGline path*/) throws InstanceNotFoundException {
-		this.taxiService.destinationReached(futureTravelId, distance
-				/*,originPoint, destinationPoint, path*/);
+			@PathVariable("distance") double distance,
+			@PathVariable("originPoint") Point originPoint,
+			@PathVariable("destinationPoint") Point destinationPoint,
+			@PathVariable("path") MultiLineString path) throws InstanceNotFoundException {
+		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, path);
 	}
 
 }

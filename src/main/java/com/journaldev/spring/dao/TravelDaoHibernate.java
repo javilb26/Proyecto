@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Travel;
 
-@Repository("travelDao")
+@Repository("TravelDao")
 public class TravelDaoHibernate extends
 		GenericDaoHibernate<Travel, Long> implements TravelDao {
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Country;
 
-@Repository("countryDao")
+@Repository("CountryDao")
 public class CountryDaoHibernate extends
 		GenericDaoHibernate<Country, Long> implements CountryDao {
 

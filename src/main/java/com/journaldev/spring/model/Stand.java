@@ -1,7 +1,9 @@
 package com.journaldev.spring.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,11 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.postgresql.geometric.PGpoint;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.Point;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -23,13 +27,13 @@ public class Stand {
 
 	private long standId;
 	private String name;
-	private PGpoint location;
-	@JsonManagedReference
+	private Point location;
+	@JsonIgnore
 	private Zone zone;
-	@JsonManagedReference
+	@JsonIgnore
 	private Address address;
-	@JsonBackReference
-	private Set<Entry> entries;
+	@JsonIgnore
+	private Set<Entry> entries = new HashSet<Entry>();
 	
 	public Stand() {
 	}
@@ -52,11 +56,14 @@ public class Stand {
 		this.name = name;
 	}
 
-	public PGpoint getLocation() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(Point,4326)")
+	public Point getLocation() {
 		return location;
 	}
 
-	public void setLocation(PGpoint location) {
+	public void setLocation(Point location) {
 		this.location = location;
 	}
 

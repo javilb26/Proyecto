@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Zone;
 
-@Repository("zoneDao")
+@Repository("ZoneDao")
 public class ZoneDaoHibernate extends
 		GenericDaoHibernate<Zone, Long> implements ZoneDao {
 

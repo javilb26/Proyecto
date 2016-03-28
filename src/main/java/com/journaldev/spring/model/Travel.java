@@ -2,6 +2,7 @@ package com.journaldev.spring.model;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,12 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Immutable;
-import org.postgresql.geometric.PGline;
-import org.postgresql.geometric.PGpoint;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.Point;
 
 @Entity
-@Immutable
 public class Travel {
 
 	private long travelId;
@@ -31,9 +34,9 @@ public class Travel {
 	private City destinationCity;
 	private Address destinationAddress;
 	private double distance;
-	private PGpoint originPoint;
-	private PGpoint destinationPoint;
-	private PGline path;
+	private Point originPoint;
+	private Point destinationPoint;
+	private MultiLineString path;
 	private Taxi taxi;
 
 	public Travel() {
@@ -42,7 +45,7 @@ public class Travel {
 	public Travel(Calendar date, Country originCountry, Region originRegion,
 			City originCity, Address originAddress, Country destinationCountry,
 			Region destinationRegion, City destinationCity,
-			Address destinationAddress, double distance, Taxi taxi) {
+			Address destinationAddress, Taxi taxi) {
 		this.date = date;
 		this.originCountry = originCountry;
 		this.originRegion = originRegion;
@@ -52,15 +55,15 @@ public class Travel {
 		this.destinationRegion = destinationRegion;
 		this.destinationCity = destinationCity;
 		this.destinationAddress = destinationAddress;
-		this.distance = distance;
 		this.taxi = taxi;
 	}
 	
+	//Este no lo necesito ya que voy a usar el anterior y despues los set
 	public Travel(Calendar date, Country originCountry, Region originRegion,
 			City originCity, Address originAddress, Country destinationCountry,
 			Region destinationRegion, City destinationCity,
-			Address destinationAddress, double distance, PGpoint originPoint,
-			PGpoint destinationPoint, PGline path, Taxi taxi) {
+			Address destinationAddress, double distance, Point originPoint,
+			Point destinationPoint, MultiLineString path, Taxi taxi) {
 		this.date = date;
 		this.originCountry = originCountry;
 		this.originRegion = originRegion;
@@ -184,27 +187,36 @@ public class Travel {
 		this.distance = distance;
 	}
 
-	public PGpoint getOriginPoint() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(Point,4326)")
+	public Point getOriginPoint() {
 		return originPoint;
 	}
 
-	public void setOriginPoint(PGpoint originPoint) {
+	public void setOriginPoint(Point originPoint) {
 		this.originPoint = originPoint;
 	}
 
-	public PGpoint getDestinationPoint() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(Point,4326)")
+	public Point getDestinationPoint() {
 		return destinationPoint;
 	}
 
-	public void setDestinationPoint(PGpoint destinationPoint) {
+	public void setDestinationPoint(Point destinationPoint) {
 		this.destinationPoint = destinationPoint;
 	}
 
-	public PGline getPath() {
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(MultiLineString,4326)")
+	public MultiLineString getPath() {
 		return path;
 	}
 
-	public void setPath(PGline path) {
+	public void setPath(MultiLineString path) {
 		this.path = path;
 	}
 

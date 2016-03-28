@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Entry;
 
-@Repository("entryDao")
+@Repository("EntryDao")
 public class EntryDaoHibernate extends GenericDaoHibernate<Entry, Long>
 		implements EntryDao {
 

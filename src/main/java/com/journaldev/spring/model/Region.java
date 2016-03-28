@@ -14,9 +14,8 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Immutable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Immutable
@@ -26,10 +25,9 @@ public class Region {
 	private Long regionId;
 	private String code;
 	private String name;
-	//@JsonManagedReference
-	@JsonBackReference
+	@JsonIgnore
 	private Country country;
-	@JsonBackReference
+	@JsonIgnore
 	private Set<City> cities = new HashSet<City>();
 	
 	public Region() {

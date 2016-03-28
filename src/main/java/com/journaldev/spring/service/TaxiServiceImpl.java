@@ -3,8 +3,6 @@ package com.journaldev.spring.service;
 import java.util.Calendar;
 import java.util.List;
 
-import org.postgresql.geometric.PGline;
-import org.postgresql.geometric.PGpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +22,15 @@ import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.Country;
-import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.Travel;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.Point;
 
-@Service("taxiService")
+@Service("TaxiService")
 @Transactional
 public class TaxiServiceImpl implements TaxiService {
 
@@ -63,34 +62,22 @@ public class TaxiServiceImpl implements TaxiService {
 	private StandDao standDao;
 
 	@Override
-	public void createTaxi(Taxi taxi) {
+	public Taxi createTaxi() {
+		Taxi taxi = new Taxi();
 		this.taxiDao.save(taxi);
+		return taxi;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Taxi login(Long taxiId, String password, boolean passwordIsEncrypted)
-			throws InstanceNotFoundException, IncorrectPasswordException {
-		System.out.println("Dentro del servicio");
+	public Taxi login(Long taxiId, String password)
+			throws InstanceNotFoundException {
+		System.out.println("TaxiServiceImpl -> Entra en login");
 		Taxi taxi = taxiDao.find(taxiId);
-		String storedPassword = taxi.getPassword();
-		if (password.compareTo(taxi.getPassword()) == 0) {
-			System.out.println("Devuelve taxi correcto");
-			return taxi;
+		if (password.compareTo(taxi.getPassword()) != 0) {
+			System.out.println("IncorrectPasswordException");
+			return null;
 		}
-		if (passwordIsEncrypted) {
-			if (!password.equals(storedPassword)) {
-				System.out.println("Incorrect encrypted password exception");
-				throw new IncorrectPasswordException(taxiId);
-			}
-		} else {
-			if (!PasswordEncrypter.isClearPasswordCorrect(password,
-					storedPassword)) {
-				System.out.println("Incorrect password exception");
-				throw new IncorrectPasswordException(taxiId);
-			}
-		}
-		System.out.println("Devuelve taxi correcto");
 		return taxi;
 	}
 
@@ -99,6 +86,7 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		taxi.setActualState(actualState);
+		// TODO no habria que hacerlo al arreglar el flush
 		this.taxiDao.save(taxi);
 	}
 
@@ -111,7 +99,7 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
-	public void updatePositionTaxi(Long taxiId, PGpoint position)
+	public void updatePositionTaxi(Long taxiId, Point position)
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		taxi.setPosition(position);
@@ -126,26 +114,8 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Taxi getTaxiById(Long taxiId) throws InstanceNotFoundException {
+	public Taxi getTaxi(Long taxiId) throws InstanceNotFoundException {
 		return this.taxiDao.find(taxiId);
-	}
-
-	@Override
-	public void removeTaxi(Long taxiId) throws InstanceNotFoundException {
-		this.taxiDao.remove(taxiId);
-	}
-
-	@Override
-	public void changePassword(Long taxiId, String oldClearPassword,
-			String newClearPassword) throws IncorrectPasswordException,
-			InstanceNotFoundException {
-		Taxi taxi = taxiDao.find(taxiId);
-		String storedPassword = taxi.getPassword();
-		if (!PasswordEncrypter.isClearPasswordCorrect(oldClearPassword,
-				storedPassword)) {
-			throw new IncorrectPasswordException(taxi.getTaxiId());
-		}
-		taxi.setPassword(PasswordEncrypter.crypt(newClearPassword));
 	}
 
 	@Override
@@ -199,37 +169,31 @@ public class TaxiServiceImpl implements TaxiService {
 		Region region = regionDao.find(regionId);
 		City city = cityDao.find(cityId);
 		Address address = addressDao.find(addressId);
-		FutureTravel travel = new FutureTravel(now, client.getOriginCountry(),
+		Travel travel = new Travel(now, client.getOriginCountry(),
 				client.getOriginRegion(), client.getOriginCity(),
 				client.getOriginAddress(), country, region, city, address, taxi);
-		this.futureTravelDao.save(travel);
-		
-		//TODO no setea el cliente
+		this.travelDao.save(travel);
+		// TODO no setea el cliente
 		taxi.setActualState(State.BUSY);
 		taxi.setClient(client);
 		this.taxiDao.save(taxi);
 	}
 
 	@Override
-	public void destinationReached(Long futureTravelId, double distance)
-			//PGpoint originPoint, PGpoint destinationPoint, PGline path)
+	public void destinationReached(Long travelId, double distance,
+			Point originPoint, Point destinationPoint, MultiLineString path)
 			throws InstanceNotFoundException {
-		
-		FutureTravel futureTravel = futureTravelDao.find(futureTravelId);
-		Taxi taxi = taxiDao.find(futureTravel.getTaxi().getTaxiId());
+		Travel travel = travelDao.find(travelId);
+		Taxi taxi = travel.getTaxi();
 		taxi.setActualState(State.AVAILABLE);
-		Client client = taxi.getClient();
-		Travel travel = new Travel(futureTravel.getDate(),
-				futureTravel.getOriginCountry(), futureTravel.getOriginRegion(),
-				futureTravel.getOriginCity(), futureTravel.getOriginAddress(),
-				futureTravel.getDestinationCountry(), futureTravel.getDestinationRegion(),
-				futureTravel.getDestinationCity(), futureTravel.getDestinationAddress(),
-				distance, taxi);
-		travelDao.save(travel);
-		clientDao.remove(client.getClientId());
+		travel.setDistance(distance);
+		travel.setOriginPoint(originPoint);
+		travel.setDestinationPoint(destinationPoint);
+		travel.setPath(path);
+		this.travelDao.save(travel);
+		clientDao.remove(taxi.getClient().getClientId());
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
-		
 	}
 
 }

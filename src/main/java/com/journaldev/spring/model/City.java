@@ -3,6 +3,7 @@ package com.journaldev.spring.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,11 +15,13 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Immutable;
 
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaleset.geo.geojson.GeometryDeserializer;
+import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.MultiPolygon;
 
 @Entity
 @Immutable
@@ -27,12 +30,10 @@ public class City {
 
 	private long cityId;
 	private String name;
-	@JsonIgnore
 	private MultiPolygon location;
-	//@JsonManagedReference
-	@JsonBackReference
+	@JsonIgnore
 	private Region region;
-	@JsonBackReference
+	@JsonIgnore
 	private Set<Address> addresses = new HashSet<Address>();
 	
 	public City() {
@@ -56,6 +57,9 @@ public class City {
 		this.name = name;
 	}
 
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(using = GeometryDeserializer.class)
+	@Column(columnDefinition = "geometry(MultiPolygon,4326)")
 	public MultiPolygon getLocation() {
 		return location;
 	}
