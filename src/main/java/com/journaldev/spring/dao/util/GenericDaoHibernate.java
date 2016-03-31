@@ -26,8 +26,6 @@ GenericDao<E, PK> {
 	}
 
 	protected Session getSession() {
-		//TODO Quitar cuando arregle el flush
-		System.out.println("FlushMode: " + sessionFactory.getCurrentSession().getFlushMode().toString());
 		return sessionFactory.getCurrentSession();
 	}
 
