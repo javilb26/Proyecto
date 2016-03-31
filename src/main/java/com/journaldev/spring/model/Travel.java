@@ -57,28 +57,6 @@ public class Travel {
 		this.destinationAddress = destinationAddress;
 		this.taxi = taxi;
 	}
-	
-	//Este no lo necesito ya que voy a usar el anterior y despues los set
-	public Travel(Calendar date, Country originCountry, Region originRegion,
-			City originCity, Address originAddress, Country destinationCountry,
-			Region destinationRegion, City destinationCity,
-			Address destinationAddress, double distance, Point originPoint,
-			Point destinationPoint, MultiLineString path, Taxi taxi) {
-		this.date = date;
-		this.originCountry = originCountry;
-		this.originRegion = originRegion;
-		this.originCity = originCity;
-		this.originAddress = originAddress;
-		this.destinationCountry = destinationCountry;
-		this.destinationRegion = destinationRegion;
-		this.destinationCity = destinationCity;
-		this.destinationAddress = destinationAddress;
-		this.distance = distance;
-		this.originPoint = originPoint;
-		this.destinationPoint = destinationPoint;
-		this.path = path;
-		this.taxi = taxi;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

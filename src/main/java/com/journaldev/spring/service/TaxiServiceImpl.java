@@ -72,7 +72,6 @@ public class TaxiServiceImpl implements TaxiService {
 	@Transactional(readOnly = true)
 	public Taxi login(Long taxiId, String password)
 			throws InstanceNotFoundException {
-		System.out.println("TaxiServiceImpl -> Entra en login");
 		Taxi taxi = taxiDao.find(taxiId);
 		if (password.compareTo(taxi.getPassword()) != 0) {
 			System.out.println("IncorrectPasswordException");
@@ -173,7 +172,6 @@ public class TaxiServiceImpl implements TaxiService {
 				client.getOriginRegion(), client.getOriginCity(),
 				client.getOriginAddress(), country, region, city, address, taxi);
 		this.travelDao.save(travel);
-		// TODO no setea el cliente
 		taxi.setActualState(State.BUSY);
 		taxi.setClient(client);
 		this.taxiDao.save(taxi);
@@ -185,7 +183,7 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		Travel travel = travelDao.find(travelId);
 		Taxi taxi = travel.getTaxi();
-		taxi.setActualState(State.AVAILABLE);
+		taxi.setActualState(taxi.getFutureState());
 		travel.setDistance(distance);
 		travel.setOriginPoint(originPoint);
 		travel.setDestinationPoint(destinationPoint);
