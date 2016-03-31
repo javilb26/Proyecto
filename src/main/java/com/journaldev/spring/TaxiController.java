@@ -24,8 +24,10 @@ import com.journaldev.spring.model.State;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
-import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
 public class TaxiController {
@@ -43,7 +45,7 @@ public class TaxiController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "centralService")
-	public void setClientService(CentralService centralService) {
+	public void setCentralService(CentralService centralService) {
 		this.centralService = centralService;
 	}
 
@@ -148,10 +150,15 @@ public class TaxiController {
 	public void destinationReached(
 			@PathVariable("futureTravelId") Long futureTravelId,
 			@PathVariable("distance") double distance,
-			@PathVariable("originPoint") Point originPoint,
-			@PathVariable("destinationPoint") Point destinationPoint,
-			@PathVariable("path") MultiLineString path) throws InstanceNotFoundException {
-		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, path);
+			@PathVariable("ox") double ox,
+			@PathVariable("oy") double oy,
+			@PathVariable("dx") double dx,
+			@PathVariable("dy") double dy,
+			@PathVariable("path") /*MultiLine*/String path) throws InstanceNotFoundException {
+		GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
+		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy, dx));
+		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, null);
 	}
 
 }

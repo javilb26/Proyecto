@@ -10,7 +10,6 @@
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<beans:property name="driverClassName" value="org.postgresql.Driver" />
-		<!-- <beans:property name="driverClassName" value="org.postgis.DriverWrapper" /> -->
 		<beans:property name="url"
 			value="jdbc:postgresql://localhost:5432/bd_postgis" />
 		<beans:property name="username" value="postgres" />
@@ -55,7 +54,5 @@
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
-
-
 
 </beans:beans>
