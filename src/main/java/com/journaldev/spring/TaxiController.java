@@ -31,7 +31,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
 public class TaxiController {
-
+// TODO Revisar metodos http REST
 	private TaxiService taxiService;
 	private CentralService centralService;
 
@@ -153,7 +153,7 @@ public class TaxiController {
 			@PathVariable("ox") double ox,
 			@PathVariable("oy") double oy,
 			@PathVariable("dx") double dx,
-			@PathVariable("dy") double dy,
+			@PathVariable("dy") double dy,//TODO Mirar como recibir el multilinestring
 			@PathVariable("path") /*MultiLine*/String path) throws InstanceNotFoundException {
 		GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
