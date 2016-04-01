@@ -30,6 +30,7 @@ public class City {
 
 	private long cityId;
 	private String name;
+	@JsonIgnore
 	private MultiPolygon location;
 	@JsonIgnore
 	private Region region;
@@ -57,8 +58,8 @@ public class City {
 		this.name = name;
 	}
 
-	@JsonSerialize(using = GeometrySerializer.class)
-	@JsonDeserialize(using = GeometryDeserializer.class)
+	//@JsonSerialize(using = GeometrySerializer.class)
+	//@JsonDeserialize(using = GeometryDeserializer.class)
 	@Column(columnDefinition = "geometry(MultiPolygon,4326)")
 	public MultiPolygon getLocation() {
 		return location;
