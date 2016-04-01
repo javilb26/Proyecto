@@ -158,7 +158,7 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
-	public void takeClientTo(Long taxiId, Long clientId, Long countryId,
+	public Long takeClientTo(Long taxiId, Long clientId, Long countryId,
 			Long regionId, Long cityId, Long addressId)
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
@@ -175,6 +175,7 @@ public class TaxiServiceImpl implements TaxiService {
 		taxi.setActualState(State.BUSY);
 		taxi.setClient(client);
 		this.taxiDao.save(taxi);
+		return travel.getTravelId();
 	}
 
 	@Override

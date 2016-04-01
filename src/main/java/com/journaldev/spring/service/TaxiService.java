@@ -49,7 +49,7 @@ public interface TaxiService {
 	public List<Stand> getNearestStandsByTaxi(Long taxiId)
 			throws InstanceNotFoundException;
 
-	public void takeClientTo(Long taxiId, Long clientId, Long countryId,
+	public Long takeClientTo(Long taxiId, Long clientId, Long countryId,
 			Long regionId, Long cityId, Long addressId)
 			throws InstanceNotFoundException;
 

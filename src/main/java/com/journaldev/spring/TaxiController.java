@@ -135,14 +135,14 @@ public class TaxiController {
 	}
 
 	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}/country/{countryId}/region/{regionId}/city/{cityId}/address/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-	public void takeClientTo(@PathVariable("taxiId") Long taxiId,
+	public @ResponseBody Long takeClientTo(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("clientId") Long clientId,
 			@PathVariable("countryId") Long countryId,
 			@PathVariable("regionId") Long regionId,
 			@PathVariable("cityId") Long cityId,
 			@PathVariable("addressId") Long addressId)
 			throws InstanceNotFoundException {
-		this.taxiService.takeClientTo(taxiId, clientId, countryId, regionId,
+		return this.taxiService.takeClientTo(taxiId, clientId, countryId, regionId,
 				cityId, addressId);
 	}
 
