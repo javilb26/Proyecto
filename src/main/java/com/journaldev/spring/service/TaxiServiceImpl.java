@@ -195,4 +195,12 @@ public class TaxiServiceImpl implements TaxiService {
 		this.taxiDao.save(taxi);
 	}
 
+	@Override
+	public void receivePositionTaxi(Long taxiId, Point position)
+			throws InstanceNotFoundException {
+		Taxi taxi = taxiDao.find(taxiId);
+		taxi.setPosition(position);
+		this.taxiDao.save(taxi);
+	}
+
 }

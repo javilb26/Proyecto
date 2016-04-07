@@ -31,9 +31,11 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
 public class TaxiController {
-// TODO Revisar metodos http REST
+
 	private TaxiService taxiService;
 	private CentralService centralService;
+	GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(),
+			4326);
 
 	Logger LOG = LoggerFactory.getLogger(TaxiController.class);
 
@@ -59,16 +61,20 @@ public class TaxiController {
 		return this.centralService.getClients();
 	}
 
-	@RequestMapping(value = "/taxi/add", method = RequestMethod.POST)
-	public void createTaxi() {
-		this.taxiService.createTaxi();
+	@RequestMapping(value = "/addtaxi", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public Taxi createTaxi() {
+		return this.taxiService.createTaxi();
 	}
 
-	@RequestMapping(value = "/client/add", method = RequestMethod.PUT)
-	public void createClient() throws InstanceNotFoundException {
-		// TODO hardcodeados no
-		this.centralService.createClient(Long.valueOf(1), Long.valueOf(6),
-				Long.valueOf(6944), Long.valueOf(1639), null/*new Point(43.36, -8.41)*/);
+	@RequestMapping(value = "/addclient", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public void createClient(@RequestBody Client input)
+			throws InstanceNotFoundException {
+		this.centralService.createClient(input.getOriginCountry()
+				.getCountryId(), input.getOriginRegion().getRegionId(), input
+				.getOriginCity().getCityId(), input.getOriginAddress()
+				.getAddressId(), //TODO mirar como traer un punto en un post
+		// geometryFactory.createPoint(new Coordinate(y, x))
+				null);
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -120,6 +126,14 @@ public class TaxiController {
 				State.valueOf(state.toUpperCase()));
 	}
 
+	@RequestMapping(value = "/taxi/{taxiId}/position/{x}/{y}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void receivePositionTaxi(@PathVariable("taxiId") Long taxiId,
+			@PathVariable("x") Double x, @PathVariable("y") Double y)
+			throws InstanceNotFoundException {
+		this.taxiService.receivePositionTaxi(taxiId,
+				geometryFactory.createPoint(new Coordinate(y, x)));
+	}
+
 	@RequestMapping(value = "/taxi/{taxiId}/standstaxi", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Stand> getNearestStandsByTaxi(
 			@PathVariable("taxiId") Long taxiId)
@@ -142,23 +156,27 @@ public class TaxiController {
 			@PathVariable("cityId") Long cityId,
 			@PathVariable("addressId") Long addressId)
 			throws InstanceNotFoundException {
-		return this.taxiService.takeClientTo(taxiId, clientId, countryId, regionId,
-				cityId, addressId);
+		return this.taxiService.takeClientTo(taxiId, clientId, countryId,
+				regionId, cityId, addressId);
 	}
-
-	@RequestMapping(value = "/arrival/{futureTravelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-	public void destinationReached(
-			@PathVariable("futureTravelId") Long futureTravelId,
+	//TODO Pasar esto a POST
+	@RequestMapping(value = "/arrival/{travelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void destinationReached(@PathVariable("travelId") Long travelId,
 			@PathVariable("distance") double distance,
-			@PathVariable("ox") double ox,
-			@PathVariable("oy") double oy,
-			@PathVariable("dx") double dx,
-			@PathVariable("dy") double dy,//TODO Mirar como recibir el multilinestring
-			@PathVariable("path") /*MultiLine*/String path) throws InstanceNotFoundException {
-		GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+			@PathVariable("ox") double ox, @PathVariable("oy") double oy,
+			@PathVariable("dx") double dx, @PathVariable("dy") double dy,// TODO
+																			// Mirar
+																			// como
+																			// recibir
+																			// el
+																			// multilinestring
+			@PathVariable("path")/* MultiLine */String path)
+			throws InstanceNotFoundException {
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
-		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy, dx));
-		this.taxiService.destinationReached(futureTravelId, distance, originPoint, destinationPoint, null);
+		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy,
+				dx));
+		this.taxiService.destinationReached(travelId, distance, originPoint,
+				destinationPoint, null);
 	}
 
 }

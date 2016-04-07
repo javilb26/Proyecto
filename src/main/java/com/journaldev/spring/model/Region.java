@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Region {
 
 	private Long regionId;
+	@JsonIgnore
 	private String code;
 	private String name;
 	@JsonIgnore

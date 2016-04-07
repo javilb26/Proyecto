@@ -57,4 +57,7 @@ public interface TaxiService {
 			Point originPoint, Point destinationPoint, MultiLineString path)
 			throws InstanceNotFoundException;
 
+	public void receivePositionTaxi(Long taxiId, Point position)
+			throws InstanceNotFoundException;
+
 }

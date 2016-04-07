@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Country {
 	
 	private long countryId;
+	@JsonIgnore
 	private String code;
 	private String name;
 	@JsonIgnore
