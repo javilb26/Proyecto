@@ -16,7 +16,7 @@ public class FutureTravelDaoHibernate extends
 	public List<FutureTravel> getFutureTravels(Long taxiId) {
 		return getSession()
 				.createQuery(
-						"SELECT t FROM FutureTravel t WHERE t.taxi = :taxiId ORDER BY t.time")
+						"SELECT t FROM FutureTravel t WHERE t.taxi.taxiId = :taxiId ORDER BY t.time")
 				.setParameter("taxiId", taxiId).list();
 	}
 

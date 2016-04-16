@@ -8,7 +8,7 @@ import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
-import com.journaldev.spring.model.State;
+import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
@@ -20,10 +20,10 @@ public interface TaxiService {
 	public Taxi login(Long taxiId, String password)
 			throws InstanceNotFoundException;
 
-	public void updateActualStateTaxi(Long taxiId, State actualState)
+	public void updateActualStateTaxi(Long taxiId, TaxiState actualState)
 			throws InstanceNotFoundException;
 
-	public void updateFutureStateTaxi(Long taxiId, State futureState)
+	public void updateFutureStateTaxi(Long taxiId, TaxiState futureState)
 			throws InstanceNotFoundException;
 
 	public List<Taxi> getTaxis();
@@ -57,7 +57,6 @@ public interface TaxiService {
 			Point originPoint, Point destinationPoint, MultiLineString path)
 			throws InstanceNotFoundException;
 
-	public void receivePositionTaxi(Long taxiId, Point position)
-			throws InstanceNotFoundException;
+	
 
 }

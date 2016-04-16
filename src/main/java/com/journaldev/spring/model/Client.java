@@ -23,7 +23,6 @@ import com.scaleset.geo.geojson.GeometrySerializer;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
-@Immutable
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client {
 
@@ -34,6 +33,7 @@ public class Client {
 	private Address originAddress;
 	private Calendar entry;
 	private Point location;
+	private ClientState clientState;
 
 	public Client() {
 	}
@@ -46,6 +46,7 @@ public class Client {
 		this.originAddress = originAddress;
 		this.entry = entry;
 		this.location = location;
+		this.clientState = ClientState.WAITING;
 	}
 
 	@Id
@@ -58,7 +59,7 @@ public class Client {
 		this.clientId = clientId;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "originCountry")
 	public Country getOriginCountry() {
 		return originCountry;
@@ -68,7 +69,7 @@ public class Client {
 		this.originCountry = originCountry;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "originRegion")
 	public Region getOriginRegion() {
 		return originRegion;
@@ -78,7 +79,7 @@ public class Client {
 		this.originRegion = originRegion;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "originCity")
 	public City getOriginCity() {
 		return originCity;
@@ -88,7 +89,7 @@ public class Client {
 		this.originCity = originCity;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "originAddress")
 	public Address getOriginAddress() {
 		return originAddress;
@@ -116,6 +117,14 @@ public class Client {
 
 	public void setLocation(Point location) {
 		this.location = location;
+	}
+
+	public ClientState getClientState() {
+		return clientState;
+	}
+
+	public void setClientState(ClientState clientState) {
+		this.clientState = clientState;
 	}
 
 }

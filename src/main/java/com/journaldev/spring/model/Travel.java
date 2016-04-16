@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.scaleset.geo.geojson.GeometryDeserializer;
@@ -21,6 +22,7 @@ import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Travel {
 
 	private long travelId;
@@ -77,7 +79,7 @@ public class Travel {
 		this.date = date;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "originCountry")
 	public Country getOriginCountry() {
 		return originCountry;
@@ -87,7 +89,7 @@ public class Travel {
 		this.originCountry = originCountry;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "originRegion")
 	public Region getOriginRegion() {
 		return originRegion;
@@ -97,7 +99,7 @@ public class Travel {
 		this.originRegion = originRegion;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "originCity")
 	public City getOriginCity() {
 		return originCity;
@@ -107,7 +109,7 @@ public class Travel {
 		this.originCity = originCity;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "originAddress")
 	public Address getOriginAddress() {
 		return originAddress;
@@ -117,7 +119,7 @@ public class Travel {
 		this.originAddress = originAddress;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationCountry")
 	public Country getDestinationCountry() {
 		return destinationCountry;
@@ -127,7 +129,7 @@ public class Travel {
 		this.destinationCountry = destinationCountry;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationRegion")
 	public Region getDestinationRegion() {
 		return destinationRegion;
@@ -137,7 +139,7 @@ public class Travel {
 		this.destinationRegion = destinationRegion;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationCity")
 	public City getDestinationCity() {
 		return destinationCity;
@@ -147,7 +149,7 @@ public class Travel {
 		this.destinationCity = destinationCity;
 	}
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationAddress")
 	public Address getDestinationAddress() {
 		return destinationAddress;

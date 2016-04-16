@@ -24,6 +24,7 @@ public class Zone {
 
 	private long zoneId;
 	private String name;
+	@JsonIgnore
 	private MultiPolygon location;
 	@JsonIgnore
 	private Set<Stand> stands = new HashSet<Stand>();
@@ -48,9 +49,10 @@ public class Zone {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+/*
 	@JsonSerialize(using = GeometrySerializer.class)
 	@JsonDeserialize(using = GeometryDeserializer.class)
+*/
 	@Column(columnDefinition = "geometry(MultiPolygon,4326)")
 	public MultiPolygon getLocation() {
 		return location;

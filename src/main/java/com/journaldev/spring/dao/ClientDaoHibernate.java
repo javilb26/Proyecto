@@ -17,4 +17,10 @@ public class ClientDaoHibernate extends
 		return getSession().createQuery("FROM Client").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Client> getClientsWaiting() {
+		return getSession().createQuery("SELECT c FROM Client c WHERE c.clientState = 0").list();
+	}
+
 }

@@ -8,5 +8,9 @@ import com.journaldev.spring.model.Taxi;
 public interface TaxiDao extends GenericDao<Taxi, Long> {
 	
 	public List<Taxi> getTaxis();
+
+	public List<Taxi> getOperatingTaxis();
+	
+	public List<Taxi> getAvailableTaxis();
 	
 }

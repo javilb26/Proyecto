@@ -1,5 +1,5 @@
 package com.journaldev.spring.model;
 
-public enum State {
+public enum TaxiState {
 	OFF, AVAILABLE, BUSY
 }

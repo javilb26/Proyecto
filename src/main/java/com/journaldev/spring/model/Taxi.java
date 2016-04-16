@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.scaleset.geo.geojson.GeometryDeserializer;
@@ -21,13 +22,14 @@ import com.scaleset.geo.geojson.GeometrySerializer;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Taxi {
 	
 	private long taxiId;
 	private String password;
 	private Point position;
-	private State actualState;
-	private State futureState;
+	private TaxiState actualState;
+	private TaxiState futureState;
 	@JsonIgnore
 	private Set<Travel> travels = new HashSet<Travel>();
 	@JsonIgnore
@@ -37,8 +39,8 @@ public class Taxi {
 	private Client client;
 	
 	public Taxi() {
-		this.actualState = State.OFF;
-		this.futureState = State.OFF;
+		this.actualState = TaxiState.OFF;
+		this.futureState = TaxiState.OFF;
 	}
 
 	@Id
@@ -70,19 +72,19 @@ public class Taxi {
 		this.position = position;
 	}
 
-	public State getActualState() {
+	public TaxiState getActualState() {
 		return actualState;
 	}
 
-	public void setActualState(State actualState) {
+	public void setActualState(TaxiState actualState) {
 		this.actualState = actualState;
 	}
 
-	public State getFutureState() {
+	public TaxiState getFutureState() {
 		return futureState;
 	}
 
-	public void setFutureState(State futureState) {
+	public void setFutureState(TaxiState futureState) {
 		this.futureState = futureState;
 	}
 

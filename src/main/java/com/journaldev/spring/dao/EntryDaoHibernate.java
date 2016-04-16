@@ -16,7 +16,7 @@ public class EntryDaoHibernate extends GenericDaoHibernate<Entry, Long>
 	public List<Entry> getEntries(Long standId) {
 		return getSession()
 				.createQuery(
-						"SELECT e FROM Entry e WHERE e.stand = :standId ORDER BY e.arrival")
+						"SELECT e FROM Entry e WHERE e.stand.standId = :standId ORDER BY e.arrival")
 				.setParameter("standId", standId).list();
 	}
 

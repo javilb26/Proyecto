@@ -28,7 +28,6 @@ public class Stand {
 	private long standId;
 	private String name;
 	private Point location;
-	@JsonIgnore
 	private Zone zone;
 	@JsonIgnore
 	private Address address;
@@ -67,7 +66,7 @@ public class Stand {
 		this.location = location;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "zone")
 	public Zone getZone() {
 		return zone;
