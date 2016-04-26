@@ -142,7 +142,7 @@ public class TaxiController {
 				TaxiState.valueOf(state.toUpperCase()));
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/position/{x}/{y}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxi/{taxiId}/position/{x}/{y:.+}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void updatePositionTaxi(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("x") Double x, @PathVariable("y") Double y)
 			throws InstanceNotFoundException {
