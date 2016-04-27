@@ -50,8 +50,8 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 	public List<Taxi> getTaxisByStand(Long standId) {
 		return getSession()
 				.createQuery(
-						"SELECT e.taxi FROM Stand s JOIN Entry e ON s.standId = e.stand.standId")
-				.list();
+						"SELECT t FROM Stand s JOIN Entry e ON s.standId = e.stand.standId JOIN Taxi t ON e.taxi.taxiId = t.taxiId WHERE s.standId = :standId")
+				.setParameter("standId", standId).list();
 	}
 
 }
