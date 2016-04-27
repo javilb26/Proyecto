@@ -41,7 +41,7 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 		return getSession()
 				.createQuery(
 						"SELECT s FROM Stand s JOIN Address a ON s.address.addressId = a.addressId JOIN City c ON a.city.cityId = c.cityId "
-						+ "ORDER BY ST_Distance((SELECT position FROM Taxi WHERE taxiId = :taxiId),s.location) ASC")
+								+ "ORDER BY ST_Distance((SELECT position FROM Taxi WHERE taxiId = :taxiId),s.location) ASC")
 				.setParameter("taxiId", taxiId).setMaxResults(5).list();
 	}
 
