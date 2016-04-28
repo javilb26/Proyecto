@@ -19,11 +19,11 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 	}
 
 	@Override
-	public Integer getNumTaxisStand(Long standId) {
-		return (Integer) getSession()
+	public Long getNumTaxisStand(Long standId) {
+		return (Long) getSession()
 				.createQuery(
-						"SELECT COUNT(e.taxi) FROM Stand s JOIN Entry e ON s.standId = e.stand.standId")
-				.uniqueResult();
+						"SELECT COUNT(t) FROM Stand s JOIN Entry e ON s.standId = e.stand.standId JOIN Taxi t ON e.taxi.taxiId = t.taxiId WHERE s.standId = :standId")
+				.setParameter("standId", standId).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")

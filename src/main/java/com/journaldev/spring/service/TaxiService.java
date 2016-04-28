@@ -48,6 +48,9 @@ public interface TaxiService {
 
 	public List<Stand> getNearestStandsByTaxi(Long taxiId)
 			throws InstanceNotFoundException;
+	
+	public Long getNumTaxisStand(Long standId)
+			throws InstanceNotFoundException;
 
 	public Long takeClientTo(Long taxiId, Long clientId, Long countryId,
 			Long regionId, Long cityId, Long addressId)

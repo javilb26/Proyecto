@@ -157,6 +157,12 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		return this.standDao.getNearestStandsByTaxi(taxiId);
 	}
+	
+	@Override
+	public Long getNumTaxisStand(Long standId)
+			throws InstanceNotFoundException {
+		return this.standDao.getNumTaxisStand(standId);
+	}
 
 	@Override
 	public Long takeClientTo(Long taxiId, Long clientId, Long countryId,

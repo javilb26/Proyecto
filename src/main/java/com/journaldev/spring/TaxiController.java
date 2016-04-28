@@ -176,6 +176,13 @@ public class TaxiController {
 		return this.centralService.getTaxisByStand(standId);
 	}
 	
+	@RequestMapping(value = "/stand/{standId}/numtaxis", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody Long getNumTaxisStand(
+			@PathVariable("standId") Long standId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getNumTaxisStand(standId);
+	}
+	
 	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}/country/{countryId}/region/{regionId}/city/{cityId}/address/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public @ResponseBody Long takeClientTo(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("clientId") Long clientId,
