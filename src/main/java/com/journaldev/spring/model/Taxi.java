@@ -106,7 +106,7 @@ public class Taxi {
 		this.futureTravels = futureTravels;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "client")
 	public Client getClient() {
 		return client;

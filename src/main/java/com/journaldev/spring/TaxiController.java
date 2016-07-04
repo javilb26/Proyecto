@@ -51,82 +51,78 @@ public class TaxiController {
 		this.centralService = centralService;
 	}
 
-	@RequestMapping(value = "/taxi", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getTaxis() {
 		return this.taxiService.getTaxis();
 	}
 
-	@RequestMapping(value = "/taxi/operating", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/operating", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getOperatingTaxis() {
 		return this.centralService.getOperatingTaxis();
 	}
-	
-	@RequestMapping(value = "/taxi/available", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/taxis/available", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getAvailableTaxis() {
 		return this.centralService.getAvailableTaxis();
 	}
-	
-	@RequestMapping(value = "/client", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/clients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Client> getClients() {
 		return this.centralService.getClients();
 	}
-	
-	@RequestMapping(value = "/client/waiting", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/clients/waiting", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Client> getClientsWaiting() {
 		return this.centralService.getClientsWaiting();
 	}
 
-	@RequestMapping(value = "/addtaxi", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public Taxi createTaxi() {
 		return this.taxiService.createTaxi();
 	}
 
-	//TODO Pensar si quiero mandar el punto, ya que con la direccion llegaria
-	@RequestMapping(value = "/addclient", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public void createClient(@RequestBody Client input)
+	@RequestMapping(value = "/clients", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public void createClient(@RequestBody Client client)
 			throws InstanceNotFoundException {
-		this.centralService.createClient(input.getOriginCountry()
-				.getCountryId(), input.getOriginRegion().getRegionId(), input
-				.getOriginCity().getCityId(), input.getOriginAddress()
-				.getAddressId(), // TODO mirar como traer un punto en un post
-				// geometryFactory.createPoint(new Coordinate(y, x))
-				null);
+		this.centralService.createClient(client.getOriginCountry()
+				.getCountryId(), client.getOriginRegion().getRegionId(), client
+				.getOriginCity().getCityId(), client.getOriginAddress()
+				.getAddressId(), geometryFactory.createPoint(new Coordinate(
+				client.getLocation().getY(), client.getLocation().getX())));
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public Taxi login(@RequestBody Taxi input) throws InstanceNotFoundException {
-		Taxi taxi = this.taxiService.login(input.getTaxiId(),
-				input.getPassword());
-		return taxi;
+	public Taxi login(@RequestBody Taxi taxi) throws InstanceNotFoundException {
+		return this.taxiService.login(taxi.getTaxiId(), taxi.getPassword());
 	}
 
-	@RequestMapping(value = "/country", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/countries", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Country> getCountries() {
 		return this.taxiService.getCountries();
 	}
 
-	@RequestMapping(value = "/country/{countryId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/countries/{countryId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Region> getRegions(
 			@PathVariable("countryId") Long countryId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getRegions(countryId);
 	}
 
-	@RequestMapping(value = "/region/{regionId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/regions/{regionId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<City> getCities(
 			@PathVariable("regionId") Long regionId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getCities(regionId);
 	}
 
-	@RequestMapping(value = "/city/{cityId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/cities/{cityId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Address> getAddresses(
 			@PathVariable("cityId") Long cityId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getAddresses(cityId);
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/actualstate/{state}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/actualstate/{state}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void updateActualStateTaxi(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("state") String state)
 			throws InstanceNotFoundException {
@@ -134,7 +130,7 @@ public class TaxiController {
 				TaxiState.valueOf(state.toUpperCase()));
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/futurestate/{state}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/futurestate/{state}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void updateFutureStateTaxi(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("state") String state)
 			throws InstanceNotFoundException {
@@ -142,7 +138,7 @@ public class TaxiController {
 				TaxiState.valueOf(state.toUpperCase()));
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/position/{x}/{y:.+}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/position/{x}/{y:.+}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void updatePositionTaxi(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("x") Double x, @PathVariable("y") Double y)
 			throws InstanceNotFoundException {
@@ -155,35 +151,35 @@ public class TaxiController {
 		return this.centralService.getStands();
 	}
 
-	@RequestMapping(value = "/taxi/{taxiId}/stands", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/stands", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Stand> getNearestStandsByTaxi(
 			@PathVariable("taxiId") Long taxiId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getNearestStandsByTaxi(taxiId);
 	}
 
-	@RequestMapping(value = "/zone/{zoneId}/stands", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/zones/{zoneId}/stands", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Stand> getStandsByZone(
 			@PathVariable("zoneId") Long zoneId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getStandsByZone(zoneId);
 	}
 
-	@RequestMapping(value = "/stand/{standId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/stands/{standId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getTaxisByStand(
 			@PathVariable("standId") Long standId)
 			throws InstanceNotFoundException {
 		return this.centralService.getTaxisByStand(standId);
 	}
-	
-	@RequestMapping(value = "/stand/{standId}/numtaxis", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/stands/{standId}/numtaxis", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody Long getNumTaxisStand(
 			@PathVariable("standId") Long standId)
 			throws InstanceNotFoundException {
 		return this.taxiService.getNumTaxisStand(standId);
 	}
-	
-	@RequestMapping(value = "/taxi/{taxiId}/client/{clientId}/country/{countryId}/region/{regionId}/city/{cityId}/address/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+
+	@RequestMapping(value = "/taxis/{taxiId}/clients/{clientId}/countries/{countryId}/regions/{regionId}/cities/{cityId}/addresses/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public @ResponseBody Long takeClientTo(@PathVariable("taxiId") Long taxiId,
 			@PathVariable("clientId") Long clientId,
 			@PathVariable("countryId") Long countryId,
@@ -195,7 +191,6 @@ public class TaxiController {
 				regionId, cityId, addressId);
 	}
 
-	// TODO Pasar esto a POST
 	@RequestMapping(value = "/arrival/{travelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void destinationReached(@PathVariable("travelId") Long travelId,
 			@PathVariable("distance") double distance,
