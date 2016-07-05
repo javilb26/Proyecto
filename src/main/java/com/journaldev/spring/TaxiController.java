@@ -88,8 +88,6 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		Point position = geometryFactory.createPoint(new Coordinate(location[1], location[0]));
 		long addressId = this.centralService.getNearestAddress(position);
-		//TODO quitar este print al confirmar que funciona
-		System.out.println("XXXX: "+addressId);
 		long cityId = this.centralService.getCityFromAddress(addressId);
 		long regionId = this.centralService.getRegionFromCity(cityId);
 		long countryId = this.centralService.getCountryFromRegion(regionId);
