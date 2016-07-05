@@ -82,13 +82,17 @@ public class TaxiController {
 	}
 
 	@RequestMapping(value = "/clients", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public void createClient(@RequestBody Client client)
+	public void createClient(@RequestBody double[] location)
 			throws InstanceNotFoundException {
-		this.centralService.createClient(client.getOriginCountry()
-				.getCountryId(), client.getOriginRegion().getRegionId(), client
-				.getOriginCity().getCityId(), client.getOriginAddress()
-				.getAddressId(), geometryFactory.createPoint(new Coordinate(
-				client.getLocation().getY(), client.getLocation().getX())));
+		Point position = geometryFactory.createPoint(new Coordinate(location[1], location[0]));
+		long addressId = this.centralService.getNearestAddress(position);
+		//TODO quitar este print al confirmar que funciona
+		System.out.println("XXXX: "+addressId);
+		long cityId = this.centralService.getCityFromAddress(addressId);
+		long regionId = this.centralService.getRegionFromCity(cityId);
+		long countryId = this.centralService.getCountryFromRegion(regionId);
+		this.centralService.createClient(countryId, regionId, cityId,
+				addressId, position);
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

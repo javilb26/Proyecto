@@ -20,7 +20,7 @@ public interface CentralService {
 	public List<Client> getClients();
 
 	public List<Client> getClientsWaiting();
-	
+
 	public void updatePositionTaxi(Long taxiId, Point position)
 			throws InstanceNotFoundException;
 
@@ -30,7 +30,18 @@ public interface CentralService {
 			throws InstanceNotFoundException;
 
 	public List<Taxi> getOperatingTaxis();
-	
+
 	public List<Taxi> getAvailableTaxis();
+
+	public long getNearestAddress(Point position);
+
+	public long getCityFromAddress(long addressId)
+			throws InstanceNotFoundException;
+
+	public long getRegionFromCity(long cityId)
+			throws InstanceNotFoundException;
+
+	public long getCountryFromRegion(long regionId)
+			throws InstanceNotFoundException;
 
 }

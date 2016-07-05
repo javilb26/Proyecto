@@ -101,17 +101,46 @@ public class CentralServiceImpl implements CentralService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Taxi> getOperatingTaxis() {
 		return this.taxiDao.getOperatingTaxis();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Taxi> getAvailableTaxis() {
 		return this.taxiDao.getAvailableTaxis();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Client> getClientsWaiting() {
 		return this.clientDao.getClientsWaiting();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long getNearestAddress(Point position) {
+		return this.addressDao.getNearestAddress(position);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long getCityFromAddress(long addressId)
+			throws InstanceNotFoundException {
+		return this.cityDao.getCityFromAddress(addressId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long getRegionFromCity(long cityId) throws InstanceNotFoundException {
+		return this.regionDao.getRegionFromCity(cityId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long getCountryFromRegion(long regionId)
+			throws InstanceNotFoundException {
+		return this.countryDao.getCountryFromRegion(regionId);
 	}
 }
