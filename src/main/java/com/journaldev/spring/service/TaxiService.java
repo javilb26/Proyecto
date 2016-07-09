@@ -52,7 +52,7 @@ public interface TaxiService {
 	public Long getNumTaxisStand(Long standId)
 			throws InstanceNotFoundException;
 
-	public Long takeClientTo(Long taxiId, Long clientId, Long countryId,
+	public Long takeClientTo(Long taxiId, Long countryId,
 			Long regionId, Long cityId, Long addressId)
 			throws InstanceNotFoundException;
 

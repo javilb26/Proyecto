@@ -44,4 +44,6 @@ public interface CentralService {
 	public long getCountryFromRegion(long regionId)
 			throws InstanceNotFoundException;
 
+	public void assignClientsToTaxis();
+
 }

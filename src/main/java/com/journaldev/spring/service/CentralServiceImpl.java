@@ -18,10 +18,12 @@ import com.journaldev.spring.dao.util.InstanceNotFoundException;
 import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
+import com.journaldev.spring.model.ClientState;
 import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.Taxi;
+import com.journaldev.spring.model.TaxiState;
 import com.vividsolutions.jts.geom.Point;
 
 @Service("centralService")
@@ -42,10 +44,10 @@ public class CentralServiceImpl implements CentralService {
 
 	@Autowired
 	private AddressDao addressDao;
-	
+
 	@Autowired
 	private TaxiDao taxiDao;
-	
+
 	@Autowired
 	private StandDao standDao;
 
@@ -86,10 +88,10 @@ public class CentralServiceImpl implements CentralService {
 		taxi.setPosition(position);
 		this.taxiDao.save(taxi);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public List<Stand> getStands(){
+	public List<Stand> getStands() {
 		return this.standDao.getStands();
 	}
 
@@ -142,5 +144,19 @@ public class CentralServiceImpl implements CentralService {
 	public long getCountryFromRegion(long regionId)
 			throws InstanceNotFoundException {
 		return this.countryDao.getCountryFromRegion(regionId);
+	}
+
+	@Override
+	public void assignClientsToTaxis() {
+		Client client = this.clientDao.getFirstClient();
+		Taxi taxi;
+		if (client != null) {
+			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
+			taxi.setClient(client);
+			client.setClientState(ClientState.ASSIGNED);
+			taxi.setActualState(TaxiState.BUSY);
+			this.clientDao.save(client);
+			this.taxiDao.save(taxi);
+		}
 	}
 }

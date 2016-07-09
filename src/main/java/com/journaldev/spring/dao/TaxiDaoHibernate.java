@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
 import com.journaldev.spring.model.Taxi;
+import com.vividsolutions.jts.geom.Point;
 
 @Repository("taxiDao")
-public class TaxiDaoHibernate extends
-		GenericDaoHibernate<Taxi, Long> implements TaxiDao {
+public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
+		TaxiDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -20,13 +21,28 @@ public class TaxiDaoHibernate extends
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Taxi> getOperatingTaxis() {
-		return getSession().createQuery("SELECT t FROM Taxi t WHERE t.actualState <> 0").list();
+		return getSession().createQuery(
+				"SELECT t FROM Taxi t WHERE t.actualState <> 0").list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Taxi> getAvailableTaxis() {
-		return getSession().createQuery("SELECT t FROM Taxi t WHERE t.actualState = 1").list();
+		return getSession().createQuery(
+				"SELECT t FROM Taxi t WHERE t.actualState = 1").list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Taxi getNearestAvailableTaxi(Point position) {
+		/*return (Taxi) getSession()
+				.createQuery(
+						"SELECT t FROM Taxi t WHERE ST_Distance(:position, t.position) = (SELECT min(ST_Distance(:position, ta.position)) FROM Taxi ta) AND t.actualState = 1")
+				.setParameter("position", position).uniqueResult();*/
+		return (Taxi) getSession()
+				.createQuery(
+						"SELECT t FROM Taxi t WHERE t.actualState = 1 ORDER BY ST_Distance(:position, t.position)").setMaxResults(1)
+				.setParameter("position", position).uniqueResult();
 	}
 
 }

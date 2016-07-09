@@ -27,8 +27,11 @@ import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 
 @CrossOrigin
 @RestController
@@ -86,7 +89,8 @@ public class TaxiController {
 	@RequestMapping(value = "/clients", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public void createClient(@RequestBody double[] location)
 			throws InstanceNotFoundException {
-		Point position = geometryFactory.createPoint(new Coordinate(location[1], location[0]));
+		Point position = geometryFactory.createPoint(new Coordinate(
+				location[1], location[0]));
 		long addressId = this.centralService.getNearestAddress(position);
 		long cityId = this.centralService.getCityFromAddress(addressId);
 		long regionId = this.centralService.getRegionFromCity(cityId);
@@ -183,15 +187,14 @@ public class TaxiController {
 		return this.taxiService.getNumTaxisStand(standId);
 	}
 
-	@RequestMapping(value = "/taxis/{taxiId}/clients/{clientId}/countries/{countryId}/regions/{regionId}/cities/{cityId}/addresses/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/countries/{countryId}/regions/{regionId}/cities/{cityId}/addresses/{addressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public @ResponseBody Long takeClientTo(@PathVariable("taxiId") Long taxiId,
-			@PathVariable("clientId") Long clientId,
 			@PathVariable("countryId") Long countryId,
 			@PathVariable("regionId") Long regionId,
 			@PathVariable("cityId") Long cityId,
 			@PathVariable("addressId") Long addressId)
 			throws InstanceNotFoundException {
-		return this.taxiService.takeClientTo(taxiId, clientId, countryId,
+		return this.taxiService.takeClientTo(taxiId, countryId,
 				regionId, cityId, addressId);
 	}
 
@@ -199,19 +202,27 @@ public class TaxiController {
 	public void destinationReached(@PathVariable("travelId") Long travelId,
 			@PathVariable("distance") double distance,
 			@PathVariable("ox") double ox, @PathVariable("oy") double oy,
-			@PathVariable("dx") double dx, @PathVariable("dy") double dy,// TODO
-																			// Mirar
-																			// como
-																			// recibir
-																			// el
-																			// multilinestring
-			@PathVariable("path")/* MultiLine */String path)
+			@PathVariable("dx") double dx, @PathVariable("dy") double dy,
+			@PathVariable("path") String path)
 			throws InstanceNotFoundException {
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
 		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy,
 				dx));
+		WKTReader wktReader = new WKTReader();
+		MultiLineString mlsPath;
+		try {
+			mlsPath = (MultiLineString) wktReader.read(path);
+		} catch (ParseException e) {
+			mlsPath = null;
+		}
 		this.taxiService.destinationReached(travelId, distance, originPoint,
-				destinationPoint, null);
+				destinationPoint, mlsPath);
+	}
+
+	// TODO Cambiar por PUT
+	@RequestMapping(value = "/assignclients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public void assignClientsToTaxis() {
+		this.centralService.assignClientsToTaxis();
 	}
 
 }
