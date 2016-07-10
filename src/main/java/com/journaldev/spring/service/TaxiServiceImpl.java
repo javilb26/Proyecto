@@ -23,6 +23,7 @@ import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.ClientState;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.TaxiState;
@@ -157,19 +158,18 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		return this.standDao.getNearestStandsByTaxi(taxiId);
 	}
-	
+
 	@Override
-	public Long getNumTaxisStand(Long standId)
-			throws InstanceNotFoundException {
+	public Long getNumTaxisStand(Long standId) throws InstanceNotFoundException {
 		return this.standDao.getNumTaxisStand(standId);
 	}
 
 	@Override
-	public Long takeClientTo(Long taxiId, Long countryId,
-			Long regionId, Long cityId, Long addressId)
-			throws InstanceNotFoundException {
+	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
+			Long cityId, Long addressId) throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		Client client = taxi.getClient();
+		//TODO Si no esta asignado el cliente al taxi, al hacer takeClientTo peta aqui
 		client.setClientState(ClientState.TRAVELLING);
 		Calendar now = Calendar.getInstance();
 		Country country = countryDao.find(countryId);
@@ -199,6 +199,58 @@ public class TaxiServiceImpl implements TaxiService {
 		travel.setPath(path);
 		this.travelDao.save(travel);
 		clientDao.remove(taxi.getClient().getClientId());
+		taxi.setClient(null);
+		this.taxiDao.save(taxi);
+	}
+
+	@Override
+	public List<Travel> getTravels(Long taxiId)
+			throws InstanceNotFoundException {
+		return this.travelDao.getTravels(taxiId);
+	}
+
+	@Override
+	public List<FutureTravel> getFutureTravels(Long taxiId)
+			throws InstanceNotFoundException {
+		return this.futureTravelDao.getFutureTravels(taxiId);
+	}
+
+	@Override
+	public void createFutureTravel(Long taxiId, Long originCountryId,
+			Long originRegionId, Long originCityId, Long originAddressId,
+			Long destinationCountryId, Long destinationRegionId,
+			Long destinationCityId, Long destinationAddressId)
+			throws InstanceNotFoundException {
+		Calendar now = Calendar.getInstance();
+		Country originCountry = countryDao.find(originCountryId);
+		Region originRegion = regionDao.find(originRegionId);
+		City originCity = cityDao.find(originCityId);
+		Address originAddress = addressDao.find(originAddressId);
+		Country destinationCountry = countryDao.find(destinationCountryId);
+		Region destinationRegion = regionDao.find(destinationRegionId);
+		City destinationCity = cityDao.find(destinationCityId);
+		Address destinationAddress = addressDao.find(destinationAddressId);
+		Taxi taxi = taxiDao.find(taxiId);
+		FutureTravel futureTravel = new FutureTravel(now, originCountry,
+				originRegion, originCity, originAddress, destinationCountry,
+				destinationRegion, destinationCity, destinationAddress, taxi);
+		this.futureTravelDao.save(futureTravel);
+
+	}
+
+	@Override
+	public void cancelFutureTravel(Long futureTravelId)
+			throws InstanceNotFoundException {
+		this.futureTravelDao.remove(futureTravelId);
+	}
+
+	@Override
+	public void cancelTravel(Long taxiId) throws InstanceNotFoundException {
+		Taxi taxi = taxiDao.find(taxiId);
+		Client client = taxi.getClient();
+		client.setClientState(ClientState.WAITING);
+		this.clientDao.save(client);
+		taxi.setActualState(TaxiState.AVAILABLE);
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
 	}

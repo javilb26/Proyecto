@@ -19,10 +19,12 @@ import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
+import com.journaldev.spring.model.Travel;
 import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -194,8 +196,8 @@ public class TaxiController {
 			@PathVariable("cityId") Long cityId,
 			@PathVariable("addressId") Long addressId)
 			throws InstanceNotFoundException {
-		return this.taxiService.takeClientTo(taxiId, countryId,
-				regionId, cityId, addressId);
+		return this.taxiService.takeClientTo(taxiId, countryId, regionId,
+				cityId, addressId);
 	}
 
 	@RequestMapping(value = "/arrival/{travelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
@@ -203,8 +205,7 @@ public class TaxiController {
 			@PathVariable("distance") double distance,
 			@PathVariable("ox") double ox, @PathVariable("oy") double oy,
 			@PathVariable("dx") double dx, @PathVariable("dy") double dy,
-			@PathVariable("path") String path)
-			throws InstanceNotFoundException {
+			@PathVariable("path") String path) throws InstanceNotFoundException {
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
 		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy,
 				dx));
@@ -223,6 +224,49 @@ public class TaxiController {
 	@RequestMapping(value = "/assignclients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public void assignClientsToTaxis() {
 		this.centralService.assignClientsToTaxis();
+	}
+
+	// Iteracion 3
+
+	@RequestMapping(value = "/taxis/{taxiId}/travels", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody List<Travel> getTravels(
+			@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getTravels(taxiId);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/futuretravels", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody List<FutureTravel> getFutureTravels(
+			@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getFutureTravels(taxiId);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/futuretravels", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public void createFutureTravel(@RequestBody FutureTravel futureTravel)
+			throws InstanceNotFoundException {
+		this.taxiService.createFutureTravel(futureTravel.getTaxi().getTaxiId(),
+				futureTravel.getOriginCountry().getCountryId(), futureTravel
+						.getOriginRegion().getRegionId(), futureTravel
+						.getOriginCity().getCityId(), futureTravel
+						.getOriginAddress().getAddressId(), futureTravel
+						.getDestinationCountry().getCountryId(), futureTravel
+						.getDestinationRegion().getRegionId(), futureTravel
+						.getDestinationCity().getCityId(), futureTravel
+						.getDestinationAddress().getAddressId());
+	}
+
+	@RequestMapping(value = "/futuretravels/{futureTravelId}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+	public void cancelFutureTravel(
+			@PathVariable("futureTravelId") Long futureTravelId)
+			throws InstanceNotFoundException {
+		this.taxiService.cancelFutureTravel(futureTravelId);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/canceltravel", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void cancelTravel(@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		this.taxiService.cancelTravel(taxiId);
 	}
 
 }

@@ -6,10 +6,12 @@ import com.journaldev.spring.dao.util.InstanceNotFoundException;
 import com.journaldev.spring.model.Address;
 import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
+import com.journaldev.spring.model.Travel;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
@@ -48,18 +50,31 @@ public interface TaxiService {
 
 	public List<Stand> getNearestStandsByTaxi(Long taxiId)
 			throws InstanceNotFoundException;
-	
-	public Long getNumTaxisStand(Long standId)
-			throws InstanceNotFoundException;
 
-	public Long takeClientTo(Long taxiId, Long countryId,
-			Long regionId, Long cityId, Long addressId)
-			throws InstanceNotFoundException;
+	public Long getNumTaxisStand(Long standId) throws InstanceNotFoundException;
 
-	public void destinationReached(Long futureTravelId, double distance,
+	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
+			Long cityId, Long addressId) throws InstanceNotFoundException;
+
+	public void destinationReached(Long travelId, double distance,
 			Point originPoint, Point destinationPoint, MultiLineString path)
 			throws InstanceNotFoundException;
 
-	
+	public List<Travel> getTravels(Long taxiId)
+			throws InstanceNotFoundException;
+
+	public List<FutureTravel> getFutureTravels(Long taxiId)
+			throws InstanceNotFoundException;
+
+	public void createFutureTravel(Long taxiId, Long originCountryId,
+			Long originRegionId, Long originCityId, Long originAddressId,
+			Long destinationCountryId, Long destinationRegionId,
+			Long destinationCityId, Long destinationAddressId)
+			throws InstanceNotFoundException;
+
+	public void cancelFutureTravel(Long futureTravelId)
+			throws InstanceNotFoundException;
+
+	public void cancelTravel(Long travelId) throws InstanceNotFoundException;
 
 }

@@ -148,7 +148,7 @@ public class FutureTravel {
 		this.destinationAddress = destinationAddress;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name = "taxi")
 	public Taxi getTaxi() {
 		return taxi;

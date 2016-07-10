@@ -16,7 +16,7 @@ public class TravelDaoHibernate extends
 	public List<Travel> getTravels(Long taxiId) {
 		return getSession()
 				.createQuery(
-						"SELECT t FROM Travel t WHERE t.taxi.taxiId = :taxiId ORDER BY t.time")
+						"SELECT t FROM Travel t WHERE t.taxi.taxiId = :taxiId ORDER BY t.date")
 				.setParameter("taxiId", taxiId).list();
 	}
 
