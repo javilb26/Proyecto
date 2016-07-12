@@ -1,6 +1,7 @@
 package com.journaldev.spring;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -242,18 +244,14 @@ public class TaxiController {
 		return this.taxiService.getFutureTravels(taxiId);
 	}
 
-	@RequestMapping(value = "/taxis/{taxiId}/futuretravels", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public void createFutureTravel(@RequestBody FutureTravel futureTravel)
+	@RequestMapping(value = "/futuretravels", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public void createFutureTravel(@RequestBody Map<String, Long> map)
 			throws InstanceNotFoundException {
-		this.taxiService.createFutureTravel(futureTravel.getTaxi().getTaxiId(),
-				futureTravel.getOriginCountry().getCountryId(), futureTravel
-						.getOriginRegion().getRegionId(), futureTravel
-						.getOriginCity().getCityId(), futureTravel
-						.getOriginAddress().getAddressId(), futureTravel
-						.getDestinationCountry().getCountryId(), futureTravel
-						.getDestinationRegion().getRegionId(), futureTravel
-						.getDestinationCity().getCityId(), futureTravel
-						.getDestinationAddress().getAddressId());
+		this.taxiService.createFutureTravel(map.get("taxiId"), map
+				.get("originCountryId"), map.get("originRegionId"), map
+				.get("originCityId"), map.get("originAddressId"), map
+				.get("destinationCountryId"), map.get("destinationRegionId"), map
+				.get("destinationCityId"), map.get("destinationAddressId"));
 	}
 
 	@RequestMapping(value = "/futuretravels/{futureTravelId}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
