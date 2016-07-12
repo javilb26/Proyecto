@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.journaldev.spring.dao.AddressDao;
 import com.journaldev.spring.dao.CityDao;
@@ -169,7 +170,8 @@ public class TaxiServiceImpl implements TaxiService {
 			Long cityId, Long addressId) throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		Client client = taxi.getClient();
-		//TODO Si no esta asignado el cliente al taxi, al hacer takeClientTo peta aqui
+		// TODO Si no esta asignado el cliente al taxi, al hacer takeClientTo
+		// peta aqui
 		client.setClientState(ClientState.TRAVELLING);
 		Calendar now = Calendar.getInstance();
 		Country country = countryDao.find(countryId);
@@ -253,6 +255,33 @@ public class TaxiServiceImpl implements TaxiService {
 		taxi.setActualState(TaxiState.AVAILABLE);
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
+	}
+
+	@Override
+	public Long takeClientToFromFutureTravel(Long taxiId, Long originCountryId,
+			Long originRegionId, Long originCityId, Long originAddressId,
+			Long destinationCountryId, Long destinationRegionId,
+			Long destinationCityId, Long destinationAddressId)
+			throws InstanceNotFoundException {
+		Taxi taxi = taxiDao.find(taxiId);
+		Calendar now = Calendar.getInstance();
+		Client client = new Client(countryDao.find(originCountryId),
+				regionDao.find(originRegionId), cityDao.find(originCityId),
+				addressDao.find(originAddressId), now, taxi.getPosition());
+		client.setClientState(ClientState.TRAVELLING);
+		this.clientDao.save(client);
+		Country country = countryDao.find(destinationCountryId);
+		Region region = regionDao.find(destinationRegionId);
+		City city = cityDao.find(destinationCityId);
+		Address address = addressDao.find(destinationAddressId);
+		Travel travel = new Travel(now, client.getOriginCountry(),
+				client.getOriginRegion(), client.getOriginCity(),
+				client.getOriginAddress(), country, region, city, address, taxi);
+		this.travelDao.save(travel);
+		taxi.setActualState(TaxiState.BUSY);
+		taxi.setClient(client);
+		this.taxiDao.save(taxi);
+		return travel.getTravelId();
 	}
 
 }

@@ -247,11 +247,12 @@ public class TaxiController {
 	@RequestMapping(value = "/futuretravels", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public void createFutureTravel(@RequestBody Map<String, Long> map)
 			throws InstanceNotFoundException {
-		this.taxiService.createFutureTravel(map.get("taxiId"), map
-				.get("originCountryId"), map.get("originRegionId"), map
-				.get("originCityId"), map.get("originAddressId"), map
-				.get("destinationCountryId"), map.get("destinationRegionId"), map
-				.get("destinationCityId"), map.get("destinationAddressId"));
+		this.taxiService.createFutureTravel(map.get("taxiId"),
+				map.get("originCountryId"), map.get("originRegionId"),
+				map.get("originCityId"), map.get("originAddressId"),
+				map.get("destinationCountryId"),
+				map.get("destinationRegionId"), map.get("destinationCityId"),
+				map.get("destinationAddressId"));
 	}
 
 	@RequestMapping(value = "/futuretravels/{futureTravelId}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
@@ -265,6 +266,24 @@ public class TaxiController {
 	public void cancelTravel(@PathVariable("taxiId") Long taxiId)
 			throws InstanceNotFoundException {
 		this.taxiService.cancelTravel(taxiId);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/origincountries/{originCountryId}/originregions/{originRegionId}/origincities/{originCityId}/originaddresses/{originAddressId}/destinationcountries/{destinationCountryId}/destinationregions/{destinationRegionId}/destinationcities/{destinationCityId}/destinationaddresses/{destinationAddressId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public @ResponseBody Long takeClientToFromFutureTravel(
+			@PathVariable("taxiId") Long taxiId,
+			@PathVariable("originCountryId") Long originCountryId,
+			@PathVariable("originRegionId") Long originRegionId,
+			@PathVariable("originCityId") Long originCityId,
+			@PathVariable("originAddressId") Long originAddressId,
+			@PathVariable("destinationCountryId") Long destinationCountryId,
+			@PathVariable("destinationRegionId") Long destinationRegionId,
+			@PathVariable("destinationCityId") Long destinationCityId,
+			@PathVariable("destinationAddressId") Long destinationAddressId)
+			throws InstanceNotFoundException {
+		return this.taxiService.takeClientToFromFutureTravel(taxiId,
+				originCountryId, originRegionId, originCityId, originAddressId,
+				destinationCountryId, destinationRegionId, destinationCityId,
+				destinationAddressId);
 	}
 
 }

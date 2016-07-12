@@ -77,4 +77,10 @@ public interface TaxiService {
 
 	public void cancelTravel(Long travelId) throws InstanceNotFoundException;
 
+	public Long takeClientToFromFutureTravel(Long taxiId, Long originCountryId,
+			Long originRegionId, Long originCityId, Long originAddressId,
+			Long destinationCountryId, Long destinationRegionId,
+			Long destinationCityId, Long destinationAddressId)
+			throws InstanceNotFoundException;
+
 }
