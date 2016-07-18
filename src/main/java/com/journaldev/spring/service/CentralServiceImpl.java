@@ -23,6 +23,7 @@ import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.Taxi;
+import com.journaldev.spring.model.TaxiClientDto;
 import com.journaldev.spring.model.TaxiState;
 import com.vividsolutions.jts.geom.Point;
 
@@ -158,5 +159,51 @@ public class CentralServiceImpl implements CentralService {
 			this.clientDao.save(client);
 			this.taxiDao.save(taxi);
 		}
+	}
+
+	@Override
+	public TaxiClientDto getTaxiIdWithTokenAndClient() throws Exception {
+		Client client = this.clientDao.getFirstClient();
+		Taxi taxi;
+		if (client != null) {
+			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
+			return new TaxiClientDto(taxi.getTaxiId(), taxi.getToken(),
+					client.getClientId(), client.getOriginCountry().getName(),
+					client.getOriginRegion().getName(), client.getOriginCity()
+							.getName(), client.getOriginAddress().getName());
+		} else {
+			throw new Exception();
+		}
+
+	}
+
+	@Override
+	public void setTokenToTaxi(Long taxiId, String token)
+			throws InstanceNotFoundException {
+		Taxi taxi = taxiDao.find(taxiId);
+		taxi.setToken(token);
+		taxiDao.save(taxi);
+	}
+
+	@Override
+	public void assignClientToTaxi(Long taxiId, Long clientId)
+			throws InstanceNotFoundException {
+		Client client = this.clientDao.find(clientId);
+		Taxi taxi = this.taxiDao.find(taxiId);
+		if ((client != null) && (taxi != null)){
+			taxi.setClient(client);
+			client.setClientState(ClientState.ASSIGNED);
+			taxi.setActualState(TaxiState.BUSY);
+			this.clientDao.save(client);
+			this.taxiDao.save(taxi);
+		}
+	}
+
+	@Override
+	public void setTaxiToOff(Long taxiId)
+			throws InstanceNotFoundException {
+		Taxi taxi = this.taxiDao.find(taxiId);
+		taxi.setActualState(TaxiState.OFF);
+		this.taxiDao.save(taxi);
 	}
 }

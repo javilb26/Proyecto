@@ -26,6 +26,7 @@ import com.vividsolutions.jts.geom.Point;
 public class Taxi {
 	
 	private long taxiId;
+	private String token;
 	private String password;
 	private Point position;
 	private TaxiState actualState;
@@ -51,6 +52,14 @@ public class Taxi {
 
 	public void setTaxiId(Long taxiId) {
 		this.taxiId = taxiId;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public String getPassword() {

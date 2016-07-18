@@ -24,6 +24,7 @@ import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
+import com.journaldev.spring.model.TaxiClientDto;
 import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.Travel;
@@ -284,6 +285,32 @@ public class TaxiController {
 				originCountryId, originRegionId, originCityId, originAddressId,
 				destinationCountryId, destinationRegionId, destinationCityId,
 				destinationAddressId);
+	}
+
+	@RequestMapping(value = "/taxiclient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody TaxiClientDto getTaxiIdWithTokenAndClient()
+			throws Exception {
+		return this.centralService.getTaxiIdWithTokenAndClient();
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/token/{token}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void setTokenToTaxi(@PathVariable("taxiId") Long taxiId,
+			@PathVariable("token") String token)
+			throws InstanceNotFoundException {
+		this.centralService.setTokenToTaxi(taxiId, token);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/clients/{clientId}/accept", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void assignClientToTaxi(@PathVariable("taxiId") Long taxiId,
+			@PathVariable("clientId") Long clientId)
+			throws InstanceNotFoundException {
+		this.centralService.assignClientToTaxi(taxiId, clientId);
+	}
+
+	@RequestMapping(value = "/taxis/{taxiId}/decline", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void declineClientToTaxi(@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		this.centralService.setTaxiToOff(taxiId);
 	}
 
 }
