@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
+import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.Taxi;
+import com.vividsolutions.jts.geom.Point;
 
 @Repository("standDao")
 public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
@@ -38,11 +40,15 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Stand> getNearestStandsByTaxi(Long taxiId) {
+		//Busco el taxi, su posicion, coges la ciudad en la que esta y miras que sea la misma que la de las paradas
+		Point position = (Point) getSession().createQuery("SELECT position FROM Taxi t WHERE t.taxiId = :taxiId").setParameter("taxiId", taxiId).uniqueResult();
+		City c = (City) getSession().createQuery("SELECT c FROM City c WHERE ST_Contains(c.location, :position) = true").setParameter("position", position).uniqueResult();
+		Long cityId = c.getCityId();
 		return getSession()
 				.createQuery(
 						"SELECT s FROM Stand s JOIN Address a ON s.address.addressId = a.addressId JOIN City c ON a.city.cityId = c.cityId "
-								+ "ORDER BY ST_Distance((SELECT position FROM Taxi WHERE taxiId = :taxiId),s.location) ASC")
-				.setParameter("taxiId", taxiId).setMaxResults(5).list();
+								+ "WHERE c.cityId = :cityId ORDER BY ST_Distance((SELECT position FROM Taxi WHERE taxiId = :taxiId),s.location) ASC")
+				.setParameter("taxiId", taxiId).setParameter("cityId", cityId).setMaxResults(5).list();
 	}
 
 	@SuppressWarnings("unchecked")

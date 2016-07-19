@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.journaldev.spring.dao.util.GenericDaoHibernate;
+import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.Zone;
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -41,8 +42,8 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 				.createQuery(
 						"SELECT t FROM Taxi t WHERE t.actualState = 1 ORDER BY ST_Distance(:position, t.position)").setMaxResults(1)
 				.setParameter("position", position).uniqueResult();*/
-		Zone z = (Zone) getSession().createQuery("SELECT z FROM Zone z WHERE ST_Contains(z.location, :position) = true").setParameter("position", position).uniqueResult();
-		MultiPolygon location = z.getLocation();
+		City c = (City) getSession().createQuery("SELECT c FROM City c WHERE ST_Contains(c.location, :position) = true").setParameter("position", position).uniqueResult();
+		MultiPolygon location = c.getLocation();
 		return (Taxi) getSession()
 				.createQuery(
 						"SELECT t FROM Taxi t WHERE t.actualState = 1 AND ST_Contains(:location, t.position) = true ORDER BY ST_Distance(:position, t.position)").setMaxResults(1)
