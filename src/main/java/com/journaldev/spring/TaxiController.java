@@ -222,13 +222,13 @@ public class TaxiController {
 		this.taxiService.destinationReached(travelId, distance, originPoint,
 				destinationPoint, mlsPath);
 	}
-
+/*
 	// TODO Cambiar por PUT
 	@RequestMapping(value = "/assignclients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public void assignClientsToTaxis() {
 		this.centralService.assignClientsToTaxis();
 	}
-
+*/
 	// Iteracion 3
 
 	@RequestMapping(value = "/taxis/{taxiId}/travels", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

@@ -146,7 +146,7 @@ public class CentralServiceImpl implements CentralService {
 			throws InstanceNotFoundException {
 		return this.countryDao.getCountryFromRegion(regionId);
 	}
-
+/*
 	@Override
 	public void assignClientsToTaxis() {
 		Client client = this.clientDao.getFirstClient();
@@ -160,7 +160,7 @@ public class CentralServiceImpl implements CentralService {
 			this.taxiDao.save(taxi);
 		}
 	}
-
+*/
 	@Override
 	public TaxiClientDto getTaxiIdWithTokenAndClient() throws Exception {
 		Client client = this.clientDao.getFirstClient();
