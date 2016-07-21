@@ -59,5 +59,14 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 						"SELECT t FROM Stand s JOIN Entry e ON s.standId = e.stand.standId JOIN Taxi t ON e.taxi.taxiId = t.taxiId WHERE s.standId = :standId")
 				.setParameter("standId", standId).list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Stand getStandWhereTaxiIs(Long taxiId) {
+		return (Stand) getSession()
+				.createQuery(
+						"SELECT s FROM Stand s JOIN Entry e ON s.standId = e.stand.standId JOIN Taxi t ON e.taxi.taxiId = t.taxiId WHERE t.taxiId = :taxiId")
+				.setParameter("taxiId", taxiId).setMaxResults(1).uniqueResult();
+	}
 
 }

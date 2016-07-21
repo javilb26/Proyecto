@@ -312,5 +312,11 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		this.centralService.setTaxiToOff(taxiId);
 	}
+	
+	@RequestMapping(value = "/taxis/{taxiId}/locate", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public void locateTaxi(@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		this.taxiService.locateTaxi(taxiId);
+	}
 
 }

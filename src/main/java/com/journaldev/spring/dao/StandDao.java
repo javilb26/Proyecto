@@ -18,4 +18,6 @@ public interface StandDao extends GenericDao<Stand, Long> {
 	
 	public List<Taxi> getTaxisByStand(Long standId);
 
+	public Stand getStandWhereTaxiIs(Long taxiId);
+
 }

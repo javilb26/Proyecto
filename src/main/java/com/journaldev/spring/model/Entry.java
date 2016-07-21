@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Immutable
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Entry {
 
 	private long entryId;
@@ -28,8 +28,14 @@ public class Entry {
 	@JsonIgnore
 	private Stand stand;
 	private Calendar arrival;
-	
+
 	public Entry() {
+	}
+
+	public Entry(Taxi taxi, Stand stand, Calendar arrival) {
+		this.taxi = taxi;
+		this.stand = stand;
+		this.arrival = arrival;
 	}
 
 	@Id
@@ -42,7 +48,7 @@ public class Entry {
 		this.entryId = entryId;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "taxi")
 	public Taxi getTaxi() {
 		return taxi;
@@ -52,7 +58,7 @@ public class Entry {
 		this.taxi = taxi;
 	}
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "stand")
 	public Stand getStand() {
 		return stand;

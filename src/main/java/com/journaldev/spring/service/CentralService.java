@@ -44,8 +44,6 @@ public interface CentralService {
 	public long getCountryFromRegion(long regionId)
 			throws InstanceNotFoundException;
 
-	//public void assignClientsToTaxis();
-
 	public TaxiClientDto getTaxiIdWithTokenAndClient() throws Exception;
 
 	public void setTokenToTaxi(Long taxiId, String token)

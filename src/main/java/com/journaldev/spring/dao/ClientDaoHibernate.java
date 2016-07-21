@@ -26,10 +26,16 @@ public class ClientDaoHibernate extends GenericDaoHibernate<Client, Long>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Client getFirstClient() {
-		return (Client) getSession()
+	public Client getFirstClient() throws Exception {
+		Client client = (Client) getSession()
 				.createQuery("SELECT c FROM Client c WHERE c.clientState = 0")
 				.setMaxResults(1).uniqueResult();
+		if (client!=null) {
+			return client;
+		} else {
+			throw new Exception("No client found");
+		}
+		
 	}
 
 }

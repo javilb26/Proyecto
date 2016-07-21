@@ -14,6 +14,6 @@ public interface TaxiDao extends GenericDao<Taxi, Long> {
 	
 	public List<Taxi> getAvailableTaxis();
 
-	public Taxi getNearestAvailableTaxi(Point position);
+	public Taxi getNearestAvailableTaxi(Point position) throws Exception;
 	
 }

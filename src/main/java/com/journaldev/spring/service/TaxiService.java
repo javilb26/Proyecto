@@ -83,4 +83,6 @@ public interface TaxiService {
 			Long destinationCityId, Long destinationAddressId)
 			throws InstanceNotFoundException;
 
+	public void locateTaxi(Long taxiId) throws InstanceNotFoundException;
+
 }

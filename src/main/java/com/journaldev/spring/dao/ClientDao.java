@@ -11,6 +11,6 @@ public interface ClientDao extends GenericDao<Client, Long> {
 	
 	public List<Client> getClientsWaiting();
 
-	public Client getFirstClient();
+	public Client getFirstClient() throws Exception;
 	
 }

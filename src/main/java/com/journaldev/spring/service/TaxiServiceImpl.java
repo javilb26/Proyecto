@@ -12,6 +12,7 @@ import com.journaldev.spring.dao.AddressDao;
 import com.journaldev.spring.dao.CityDao;
 import com.journaldev.spring.dao.ClientDao;
 import com.journaldev.spring.dao.CountryDao;
+import com.journaldev.spring.dao.EntryDao;
 import com.journaldev.spring.dao.FutureTravelDao;
 import com.journaldev.spring.dao.RegionDao;
 import com.journaldev.spring.dao.StandDao;
@@ -24,6 +25,7 @@ import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.ClientState;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.Entry;
 import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
@@ -63,6 +65,9 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Autowired
 	private StandDao standDao;
+	
+	@Autowired
+	private EntryDao entryDao;
 
 	@Override
 	public Taxi createTaxi() {
@@ -169,9 +174,21 @@ public class TaxiServiceImpl implements TaxiService {
 	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
 			Long cityId, Long addressId) throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
-		Client client = taxi.getClient();
-		// TODO Si no esta asignado el cliente al taxi, al hacer takeClientTo
-		// peta aqui
+		Client client = null;
+		if (taxi.getClient() == null) {
+			Stand s = standDao.getStandWhereTaxiIs(taxiId);
+			Address address = s.getAddress();
+			City city = address.getCity();
+			Region region = city.getRegion();
+			Country country = region.getCountry();
+			client = new Client(country, region, city, address, Calendar.getInstance(), taxi.getPosition());
+			this.clientDao.save(client);
+			Entry entry = s.getEntries().iterator().next();
+			this.entryDao.remove(entry.getEntryId());
+			this.standDao.save(s);
+		} else {
+			client = taxi.getClient();
+		}
 		client.setClientState(ClientState.TRAVELLING);
 		Calendar now = Calendar.getInstance();
 		Country country = countryDao.find(countryId);
@@ -282,6 +299,17 @@ public class TaxiServiceImpl implements TaxiService {
 		taxi.setClient(client);
 		this.taxiDao.save(taxi);
 		return travel.getTravelId();
+	}
+
+	@Override
+	public void locateTaxi(Long taxiId) throws InstanceNotFoundException {
+		List<Stand> stands = standDao.getNearestStandsByTaxi(taxiId);
+		Stand nearestStand = stands.get(0);
+		Taxi taxi = taxiDao.find(taxiId);
+		taxi.setActualState(TaxiState.INSTAND);
+		this.taxiDao.save(taxi);
+		Entry entry = new Entry(taxi, nearestStand, Calendar.getInstance());
+		this.entryDao.save(entry);
 	}
 
 }

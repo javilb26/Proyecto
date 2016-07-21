@@ -146,34 +146,22 @@ public class CentralServiceImpl implements CentralService {
 			throws InstanceNotFoundException {
 		return this.countryDao.getCountryFromRegion(regionId);
 	}
-/*
-	@Override
-	public void assignClientsToTaxis() {
-		Client client = this.clientDao.getFirstClient();
-		Taxi taxi;
-		if (client != null) {
-			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
-			taxi.setClient(client);
-			client.setClientState(ClientState.ASSIGNED);
-			taxi.setActualState(TaxiState.BUSY);
-			this.clientDao.save(client);
-			this.taxiDao.save(taxi);
-		}
-	}
-*/
+
 	@Override
 	public TaxiClientDto getTaxiIdWithTokenAndClient() throws Exception {
-		Client client = this.clientDao.getFirstClient();
+		Client client;
+		client = this.clientDao.getFirstClient();
 		Taxi taxi;
-		if (client != null) {
-			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
-			return new TaxiClientDto(taxi.getTaxiId(), taxi.getToken(),
-					client.getClientId(), client.getOriginCountry().getName(),
-					client.getOriginRegion().getName(), client.getOriginCity()
-							.getName(), client.getOriginAddress().getName());
-		} else {
-			throw new Exception();
-		}
+		taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
+		System.out.println("1-" + client.getLocation().toText());
+		System.out.println("2-" + taxi.getTaxiId());
+		System.out.println("3-" + taxi.getToken());
+		System.out.println("4-" + client.getClientId());
+		System.out.println("5-" + client.getOriginCountry().getName());
+		return new TaxiClientDto(taxi.getTaxiId(), taxi.getToken(),
+				client.getClientId(), client.getOriginCountry().getName(),
+				client.getOriginRegion().getName(), client.getOriginCity()
+						.getName(), client.getOriginAddress().getName());
 
 	}
 
@@ -190,7 +178,7 @@ public class CentralServiceImpl implements CentralService {
 			throws InstanceNotFoundException {
 		Client client = this.clientDao.find(clientId);
 		Taxi taxi = this.taxiDao.find(taxiId);
-		if ((client != null) && (taxi != null)){
+		if ((client != null) && (taxi != null)) {
 			taxi.setClient(client);
 			client.setClientState(ClientState.ASSIGNED);
 			taxi.setActualState(TaxiState.BUSY);
@@ -200,8 +188,7 @@ public class CentralServiceImpl implements CentralService {
 	}
 
 	@Override
-	public void setTaxiToOff(Long taxiId)
-			throws InstanceNotFoundException {
+	public void setTaxiToOff(Long taxiId) throws InstanceNotFoundException {
 		Taxi taxi = this.taxiDao.find(taxiId);
 		taxi.setActualState(TaxiState.OFF);
 		this.taxiDao.save(taxi);
