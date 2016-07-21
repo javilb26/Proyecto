@@ -197,7 +197,7 @@ public class TaxiController {
 			@PathVariable("regionId") Long regionId,
 			@PathVariable("cityId") Long cityId,
 			@PathVariable("addressId") Long addressId)
-			throws InstanceNotFoundException {
+			throws InstanceNotFoundException, Exception {
 		return this.taxiService.takeClientTo(taxiId, countryId, regionId,
 				cityId, addressId);
 	}

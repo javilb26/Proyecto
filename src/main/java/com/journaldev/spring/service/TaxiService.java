@@ -54,7 +54,7 @@ public interface TaxiService {
 	public Long getNumTaxisStand(Long standId) throws InstanceNotFoundException;
 
 	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
-			Long cityId, Long addressId) throws InstanceNotFoundException;
+			Long cityId, Long addressId) throws InstanceNotFoundException, Exception;
 
 	public void destinationReached(Long travelId, double distance,
 			Point originPoint, Point destinationPoint, MultiLineString path)

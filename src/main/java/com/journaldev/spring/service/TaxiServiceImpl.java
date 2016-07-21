@@ -170,11 +170,14 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
-			Long cityId, Long addressId) throws InstanceNotFoundException {
+			Long cityId, Long addressId) throws InstanceNotFoundException, Exception {
 		Taxi taxi = taxiDao.find(taxiId);
 		Client client = null;
 		if (taxi.getClient() == null) {
 			Stand s = standDao.getStandWhereTaxiIs(taxiId);
+			if (s==null) {
+				throw new Exception("Taxi is not in stand");
+			}
 			Address address = s.getAddress();
 			City city = address.getCity();
 			Region region = city.getRegion();
@@ -182,8 +185,8 @@ public class TaxiServiceImpl implements TaxiService {
 			client = new Client(country, region, city, address, Calendar.getInstance(), taxi.getPosition());
 			this.clientDao.save(client);
 			Entry entry = s.getEntries().iterator().next();
+			System.out.println("Entry to delete: " + entry.getEntryId());
 			this.entryDao.remove(entry.getEntryId());
-			this.standDao.save(s);
 		} else {
 			client = taxi.getClient();
 		}

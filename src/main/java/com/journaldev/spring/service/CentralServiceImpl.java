@@ -11,6 +11,7 @@ import com.journaldev.spring.dao.AddressDao;
 import com.journaldev.spring.dao.CityDao;
 import com.journaldev.spring.dao.ClientDao;
 import com.journaldev.spring.dao.CountryDao;
+import com.journaldev.spring.dao.EntryDao;
 import com.journaldev.spring.dao.RegionDao;
 import com.journaldev.spring.dao.StandDao;
 import com.journaldev.spring.dao.TaxiDao;
@@ -20,6 +21,7 @@ import com.journaldev.spring.model.City;
 import com.journaldev.spring.model.Client;
 import com.journaldev.spring.model.ClientState;
 import com.journaldev.spring.model.Country;
+import com.journaldev.spring.model.Entry;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.Taxi;
@@ -51,6 +53,9 @@ public class CentralServiceImpl implements CentralService {
 
 	@Autowired
 	private StandDao standDao;
+	
+	@Autowired
+	private EntryDao entryDao;
 
 	@Override
 	public Client createClient(Long country, Long region, Long city,
@@ -184,6 +189,12 @@ public class CentralServiceImpl implements CentralService {
 			taxi.setActualState(TaxiState.BUSY);
 			this.clientDao.save(client);
 			this.taxiDao.save(taxi);
+			Stand s = standDao.getStandWhereTaxiIs(taxiId);
+			if (s!=null) {
+				Entry entry = s.getEntries().iterator().next();
+				System.out.println("Entry to delete: " + entry.getEntryId());
+				this.entryDao.remove(entry.getEntryId());
+			}
 		}
 	}
 
