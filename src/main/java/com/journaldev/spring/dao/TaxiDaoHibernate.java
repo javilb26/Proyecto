@@ -28,7 +28,7 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 	@Override
 	public List<Taxi> getOperatingTaxis() {
 		return getSession().createQuery(
-				"SELECT t FROM Taxi t WHERE t.actualState <> 0").list();
+				"SELECT t FROM Taxi t WHERE t.actualState <> 0 AND t.actualState <> 3").list();
 	}
 
 	@SuppressWarnings("unchecked")

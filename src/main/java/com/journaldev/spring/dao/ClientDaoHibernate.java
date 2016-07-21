@@ -14,7 +14,7 @@ public class ClientDaoHibernate extends GenericDaoHibernate<Client, Long>
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Client> getClients() {
-		return getSession().createQuery("FROM Client").list();
+		return getSession().createQuery("FROM Client c WHERE c.clientState <> 2").list();
 	}
 
 	@SuppressWarnings("unchecked")
