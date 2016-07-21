@@ -67,7 +67,6 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 								+ "WHERE c.cityId = :cityId ORDER BY ST_Distance(:position, s.location) ASC")
 				.setParameter("position", position).setParameter("cityId", cityId).list();
 		Long standId = (long) 0;
-		//TODO Hay que comprobar que estando en la parada solo los taxis en estado 1 puedan recibir alertas
 		for (Stand aux: stands) {
 			if (aux.getEntries().isEmpty()) {
 			} else {

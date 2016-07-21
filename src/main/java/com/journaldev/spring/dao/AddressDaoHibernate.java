@@ -23,7 +23,6 @@ public class AddressDaoHibernate extends GenericDaoHibernate<Address, Long>
 
 	@Override
 	public long getNearestAddress(Point position) {
-		//TODO Tuve que usar sql directamente si no al pasar el punto fallaba
 		Number addressId = (Number) getSession()
 				.createSQLQuery(
 						"SELECT addressId FROM Address a WHERE ST_Distance(:position, a.location) = (SELECT min(ST_Distance(:position, ad.location)) FROM Address ad)")

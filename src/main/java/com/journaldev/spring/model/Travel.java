@@ -200,7 +200,6 @@ public class Travel {
 		this.path = path;
 	}
 
-	//TODO El taxi podria ignorarlo
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "taxi")
 	public Taxi getTaxi() {

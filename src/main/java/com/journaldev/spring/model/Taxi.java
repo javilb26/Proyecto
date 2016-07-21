@@ -35,8 +35,6 @@ public class Taxi {
 	private Set<Travel> travels = new HashSet<Travel>();
 	@JsonIgnore
 	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
-	//TODO Descomentar cuando necesite
-	//private Alert alert;
 	private Client client;
 	
 	public Taxi() {

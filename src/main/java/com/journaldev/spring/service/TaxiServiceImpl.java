@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.journaldev.spring.dao.AddressDao;
 import com.journaldev.spring.dao.CityDao;
@@ -29,8 +28,8 @@ import com.journaldev.spring.model.Entry;
 import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
-import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
+import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Travel;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
@@ -93,7 +92,6 @@ public class TaxiServiceImpl implements TaxiService {
 			throws InstanceNotFoundException {
 		Taxi taxi = taxiDao.find(taxiId);
 		taxi.setActualState(actualState);
-		// TODO no habria que hacerlo al arreglar el flush
 		this.taxiDao.save(taxi);
 	}
 

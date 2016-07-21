@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +23,9 @@ import com.journaldev.spring.model.Country;
 import com.journaldev.spring.model.FutureTravel;
 import com.journaldev.spring.model.Region;
 import com.journaldev.spring.model.Stand;
+import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.TaxiClientDto;
 import com.journaldev.spring.model.TaxiState;
-import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.Travel;
 import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
@@ -222,13 +221,7 @@ public class TaxiController {
 		this.taxiService.destinationReached(travelId, distance, originPoint,
 				destinationPoint, mlsPath);
 	}
-/*
-	// TODO Cambiar por PUT
-	@RequestMapping(value = "/assignclients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public void assignClientsToTaxis() {
-		this.centralService.assignClientsToTaxis();
-	}
-*/
+
 	// Iteracion 3
 
 	@RequestMapping(value = "/taxis/{taxiId}/travels", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

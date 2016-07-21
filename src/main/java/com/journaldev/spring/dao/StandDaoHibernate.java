@@ -60,7 +60,6 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 				.setParameter("standId", standId).list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Stand getStandWhereTaxiIs(Long taxiId) {
 		return (Stand) getSession()

@@ -15,10 +15,6 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.scaleset.geo.geojson.GeometryDeserializer;
-import com.scaleset.geo.geojson.GeometrySerializer;
 import com.vividsolutions.jts.geom.MultiLineString;
 
 @Entity

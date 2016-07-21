@@ -24,7 +24,6 @@ public class ClientDaoHibernate extends GenericDaoHibernate<Client, Long>
 				"SELECT c FROM Client c WHERE c.clientState = 0").list();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Client getFirstClient() throws Exception {
 		Client client = (Client) getSession()
