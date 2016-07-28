@@ -31,6 +31,7 @@ import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Travel;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
@@ -208,8 +209,9 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	public void destinationReached(Long travelId, double distance,
-			Point originPoint, Point destinationPoint, MultiLineString path)
+			Point originPoint, Point destinationPoint, LineString path)
 			throws InstanceNotFoundException {
+		System.out.println("55555555555555");
 		Travel travel = travelDao.find(travelId);
 		Taxi taxi = travel.getTaxi();
 		taxi.setActualState(taxi.getFutureState());
@@ -221,6 +223,7 @@ public class TaxiServiceImpl implements TaxiService {
 		clientDao.remove(taxi.getClient().getClientId());
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
+		System.out.println("6666666666666");
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.journaldev.spring.model.Stand;
 import com.journaldev.spring.model.TaxiState;
 import com.journaldev.spring.model.Taxi;
 import com.journaldev.spring.model.Travel;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
@@ -57,7 +58,7 @@ public interface TaxiService {
 			Long cityId, Long addressId) throws InstanceNotFoundException, Exception;
 
 	public void destinationReached(Long travelId, double distance,
-			Point originPoint, Point destinationPoint, MultiLineString path)
+			Point originPoint, Point destinationPoint, LineString mlsPath)
 			throws InstanceNotFoundException;
 
 	public List<Travel> getTravels(Long taxiId)

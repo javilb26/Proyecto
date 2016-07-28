@@ -31,6 +31,7 @@ import com.journaldev.spring.service.CentralService;
 import com.journaldev.spring.service.TaxiService;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
@@ -202,22 +203,36 @@ public class TaxiController {
 				cityId, addressId);
 	}
 
-	@RequestMapping(value = "/arrival/{travelId}/distance/{distance}/originpoint/{ox}/{oy}/destinationpoint/{dx}/{dy}/path/{path}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-	public void destinationReached(@PathVariable("travelId") Long travelId,
-			@PathVariable("distance") double distance,
-			@PathVariable("ox") double ox, @PathVariable("oy") double oy,
-			@PathVariable("dx") double dx, @PathVariable("dy") double dy,
-			@PathVariable("path") String path) throws InstanceNotFoundException {
-		Point originPoint = geometryFactory.createPoint(new Coordinate(oy, ox));
-		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dy,
-				dx));
+	@RequestMapping(value = "/destination", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public void destinationReached(@RequestBody Map<String, Object> map) throws InstanceNotFoundException {
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		double oY = (Double) map.get("oY");
+		double oX = (Double) map.get("oX");
+		double dY = (Double) map.get("dY");
+		double dX = (Double) map.get("dX");
+		Integer travelIdInt = (Integer) map.get("travelId");
+		long travelId = travelIdInt.longValue();
+		String path = (String) map.get("path");
+		double distance = (Double) map.get("distance");
+		System.out.println("oY: "+oY);
+		System.out.println("travelId: "+travelId);
+		System.out.println("path: "+path);
+		System.out.println("distance: "+distance);
+		Point originPoint = geometryFactory.createPoint(new Coordinate(oY, oX));
+		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dY,
+				dX));
 		WKTReader wktReader = new WKTReader();
-		MultiLineString mlsPath;
+		LineString mlsPath;
 		try {
-			mlsPath = (MultiLineString) wktReader.read(path);
+			System.out.println("111111111111111");
+			mlsPath = (LineString) wktReader.read(path);
+			mlsPath.setSRID(4326);
+			System.out.println("222222222222222222");
 		} catch (ParseException e) {
+			System.out.println("333333333333333333333");
 			mlsPath = null;
 		}
+		System.out.println("44444444444444");
 		this.taxiService.destinationReached(travelId, distance, originPoint,
 				destinationPoint, mlsPath);
 	}

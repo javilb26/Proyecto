@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.scaleset.geo.geojson.GeometryDeserializer;
 import com.scaleset.geo.geojson.GeometrySerializer;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.Point;
 
@@ -38,7 +39,7 @@ public class Travel {
 	private double distance;
 	private Point originPoint;
 	private Point destinationPoint;
-	private MultiLineString path;
+	private LineString path;
 	private Taxi taxi;
 
 	public Travel() {
@@ -191,12 +192,12 @@ public class Travel {
 
 	@JsonSerialize(using = GeometrySerializer.class)
 	@JsonDeserialize(using = GeometryDeserializer.class)
-	@Column(columnDefinition = "geometry(MultiLineString,4326)")
-	public MultiLineString getPath() {
+	@Column(columnDefinition = "geometry(LineString,4326)")
+	public LineString getPath() {
 		return path;
 	}
 
-	public void setPath(MultiLineString path) {
+	public void setPath(LineString path) {
 		this.path = path;
 	}
 
