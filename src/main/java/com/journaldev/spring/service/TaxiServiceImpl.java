@@ -68,7 +68,7 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Autowired
 	private StandDao standDao;
-	
+
 	@Autowired
 	private EntryDao entryDao;
 
@@ -97,6 +97,12 @@ public class TaxiServiceImpl implements TaxiService {
 		Taxi taxi = taxiDao.find(taxiId);
 		taxi.setActualState(actualState);
 		this.taxiDao.save(taxi);
+		Stand s = standDao.getStandWhereTaxiIs(taxiId);
+		if (s != null) {
+			Entry entry = s.getEntries().iterator().next();
+			System.out.println("Entry to delete: " + entry.getEntryId());
+			this.entryDao.remove(entry.getEntryId());
+		}
 	}
 
 	@Override
@@ -174,23 +180,30 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	public Long takeClientTo(Long taxiId, Long countryId, Long regionId,
-			Long cityId, Long addressId) throws InstanceNotFoundException, Exception {
+			Long cityId, Long addressId) throws InstanceNotFoundException,
+			Exception {
 		Taxi taxi = taxiDao.find(taxiId);
 		Client client = null;
 		if (taxi.getClient() == null) {
 			Stand s = standDao.getStandWhereTaxiIs(taxiId);
-			if (s==null) {
-				throw new Exception("Taxi is not in stand");
+			Address address;
+			if (s != null) {
+				address = s.getAddress();
+			} else {
+				long addressIdAux = addressDao.getNearestAddress(taxi.getPosition());
+				address = addressDao.find(addressIdAux);
 			}
-			Address address = s.getAddress();
 			City city = address.getCity();
 			Region region = city.getRegion();
 			Country country = region.getCountry();
-			client = new Client(country, region, city, address, Calendar.getInstance(), taxi.getPosition());
+			client = new Client(country, region, city, address,
+					Calendar.getInstance(), taxi.getPosition());
 			this.clientDao.save(client);
-			Entry entry = s.getEntries().iterator().next();
-			System.out.println("Entry to delete: " + entry.getEntryId());
-			this.entryDao.remove(entry.getEntryId());
+			if (s != null) {
+				Entry entry = s.getEntries().iterator().next();
+				System.out.println("Entry to delete: " + entry.getEntryId());
+				this.entryDao.remove(entry.getEntryId());
+			}
 		} else {
 			client = taxi.getClient();
 		}
@@ -264,9 +277,10 @@ public class TaxiServiceImpl implements TaxiService {
 		City destinationCity = cityDao.find(destinationCityId);
 		Address destinationAddress = addressDao.find(destinationAddressId);
 		Taxi taxi = taxiDao.find(taxiId);
-		FutureTravel futureTravel = new FutureTravel(dateAsCalendar, originCountry,
-				originRegion, originCity, originAddress, destinationCountry,
-				destinationRegion, destinationCity, destinationAddress, taxi);
+		FutureTravel futureTravel = new FutureTravel(dateAsCalendar,
+				originCountry, originRegion, originCity, originAddress,
+				destinationCountry, destinationRegion, destinationCity,
+				destinationAddress, taxi);
 		this.futureTravelDao.save(futureTravel);
 
 	}
