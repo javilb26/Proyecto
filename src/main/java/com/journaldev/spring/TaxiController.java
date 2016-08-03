@@ -204,7 +204,8 @@ public class TaxiController {
 	}
 
 	@RequestMapping(value = "/destination", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public void destinationReached(@RequestBody Map<String, Object> map) throws InstanceNotFoundException {
+	public void destinationReached(@RequestBody Map<String, Object> map)
+			throws InstanceNotFoundException {
 		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		double oY = (Double) map.get("oY");
 		double oX = (Double) map.get("oX");
@@ -214,10 +215,10 @@ public class TaxiController {
 		long travelId = travelIdInt.longValue();
 		String path = (String) map.get("path");
 		double distance = (Double) map.get("distance");
-		System.out.println("oY: "+oY);
-		System.out.println("travelId: "+travelId);
-		System.out.println("path: "+path);
-		System.out.println("distance: "+distance);
+		System.out.println("oY: " + oY);
+		System.out.println("travelId: " + travelId);
+		System.out.println("path: " + path);
+		System.out.println("distance: " + distance);
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oY, oX));
 		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dY,
 				dX));
@@ -254,14 +255,34 @@ public class TaxiController {
 	}
 
 	@RequestMapping(value = "/futuretravels", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public void createFutureTravel(@RequestBody Map<String, Long> map)
-			throws InstanceNotFoundException {
-		this.taxiService.createFutureTravel(map.get("taxiId"),
-				map.get("originCountryId"), map.get("originRegionId"),
-				map.get("originCityId"), map.get("originAddressId"),
-				map.get("destinationCountryId"),
-				map.get("destinationRegionId"), map.get("destinationCityId"),
-				map.get("destinationAddressId"));
+	public void createFutureTravel(@RequestBody Map<String, Object> map)
+			throws InstanceNotFoundException, Exception {
+		String date = (String) map.get("date");
+		Integer taxiIdInt = (Integer) map.get("taxiId");
+		long taxiId = taxiIdInt.longValue();
+		Integer originCountryIdInt = (Integer) map.get("originCountryId");
+		long originCountryId = originCountryIdInt.longValue();
+		Integer originRegionIdInt = (Integer) map.get("originRegionId");
+		long originRegionId = originRegionIdInt.longValue();
+		Integer originCityIdInt = (Integer) map.get("originCityId");
+		long originCityId = originCityIdInt.longValue();
+		Integer originAddressIdInt = (Integer) map.get("originAddressId");
+		long originAddressId = originAddressIdInt.longValue();
+		Integer destinationCountryIdInt = (Integer) map
+				.get("destinationCountryId");
+		long destinationCountryId = destinationCountryIdInt.longValue();
+		Integer destinationRegionIdInt = (Integer) map
+				.get("destinationRegionId");
+		long destinationRegionId = destinationRegionIdInt.longValue();
+		Integer destinationCityIdInt = (Integer) map.get("destinationCityId");
+		long destinationCityId = destinationCityIdInt.longValue();
+		Integer destinationAddressIdInt = (Integer) map
+				.get("destinationAddressId");
+		long destinationAddressId = destinationAddressIdInt.longValue();
+		this.taxiService.createFutureTravel(taxiId, originCountryId,
+				originRegionId, originCityId, originAddressId,
+				destinationCountryId, destinationRegionId, destinationCityId,
+				destinationAddressId, date);
 	}
 
 	@RequestMapping(value = "/futuretravels/{futureTravelId}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
@@ -320,7 +341,7 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		this.centralService.setTaxiToOff(taxiId);
 	}
-	
+
 	@RequestMapping(value = "/taxis/{taxiId}/locate", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public void locateTaxi(@PathVariable("taxiId") Long taxiId)
 			throws InstanceNotFoundException {

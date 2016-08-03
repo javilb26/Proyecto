@@ -1,6 +1,9 @@
 package com.journaldev.spring.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,9 +245,16 @@ public class TaxiServiceImpl implements TaxiService {
 	public void createFutureTravel(Long taxiId, Long originCountryId,
 			Long originRegionId, Long originCityId, Long originAddressId,
 			Long destinationCountryId, Long destinationRegionId,
-			Long destinationCityId, Long destinationAddressId)
-			throws InstanceNotFoundException {
-		Calendar now = Calendar.getInstance();
+			Long destinationCityId, Long destinationAddressId, String date)
+			throws InstanceNotFoundException, Exception {
+		Calendar dateAsCalendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		try {
+			Date aux = sdf.parse(date);
+			dateAsCalendar.setTime(aux);
+		} catch (ParseException e) {
+			throw new Exception("Error parsing");
+		}
 		Country originCountry = countryDao.find(originCountryId);
 		Region originRegion = regionDao.find(originRegionId);
 		City originCity = cityDao.find(originCityId);
@@ -254,7 +264,7 @@ public class TaxiServiceImpl implements TaxiService {
 		City destinationCity = cityDao.find(destinationCityId);
 		Address destinationAddress = addressDao.find(destinationAddressId);
 		Taxi taxi = taxiDao.find(taxiId);
-		FutureTravel futureTravel = new FutureTravel(now, originCountry,
+		FutureTravel futureTravel = new FutureTravel(dateAsCalendar, originCountry,
 				originRegion, originCity, originAddress, destinationCountry,
 				destinationRegion, destinationCity, destinationAddress, taxi);
 		this.futureTravelDao.save(futureTravel);

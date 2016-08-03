@@ -70,8 +70,8 @@ public interface TaxiService {
 	public void createFutureTravel(Long taxiId, Long originCountryId,
 			Long originRegionId, Long originCityId, Long originAddressId,
 			Long destinationCountryId, Long destinationRegionId,
-			Long destinationCityId, Long destinationAddressId)
-			throws InstanceNotFoundException;
+			Long destinationCityId, Long destinationAddressId, String date)
+			throws InstanceNotFoundException, Exception;
 
 	public void cancelFutureTravel(Long futureTravelId)
 			throws InstanceNotFoundException;
