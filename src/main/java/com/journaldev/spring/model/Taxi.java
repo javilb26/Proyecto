@@ -36,6 +36,8 @@ public class Taxi {
 	@JsonIgnore
 	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
 	private Client client;
+	@JsonIgnore
+	private City city;
 	
 	public Taxi() {
 		this.actualState = TaxiState.OFF;
@@ -121,6 +123,16 @@ public class Taxi {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "city")
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 
 }
