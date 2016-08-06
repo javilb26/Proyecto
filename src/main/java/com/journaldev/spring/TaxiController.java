@@ -66,6 +66,12 @@ public class TaxiController {
 		return this.taxiService.getTaxis();
 	}
 
+	@RequestMapping(value = "/taxis/{taxiId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public @ResponseBody Taxi getTaxi(@PathVariable("taxiId") Long taxiId)
+			throws InstanceNotFoundException {
+		return this.taxiService.getTaxi(taxiId);
+	}
+
 	@RequestMapping(value = "/taxis/operating", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getOperatingTaxis() {
 		return this.centralService.getOperatingTaxis();

@@ -174,6 +174,7 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Long getNumTaxisStand(Long standId) throws InstanceNotFoundException {
 		return this.standDao.getNumTaxisStand(standId);
 	}
@@ -243,12 +244,14 @@ public class TaxiServiceImpl implements TaxiService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Travel> getTravels(Long taxiId)
 			throws InstanceNotFoundException {
 		return this.travelDao.getTravels(taxiId);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<FutureTravel> getFutureTravels(Long taxiId)
 			throws InstanceNotFoundException {
 		return this.futureTravelDao.getFutureTravels(taxiId);
