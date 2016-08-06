@@ -84,9 +84,11 @@ public class TaxiServiceImpl implements TaxiService {
 	public Taxi login(Long taxiId, String password)
 			throws Exception {
 		Taxi taxi = taxiDao.find(taxiId);
-		System.out.println("Password: " + password);
+		String password2 = password.trim();
+		System.out.println("Password2: " + password2);
 		System.out.println("taxi.getPassword: " + taxi.getPassword());
-		if (password.compareTo(taxi.getPassword()) != 0) {
+		
+		if (password2.compareTo(taxi.getPassword()) != 0) {
 			System.out.println("IncorrectPasswordException");
 			throw new Exception("Incorrect Password");
 		}
