@@ -21,7 +21,7 @@ public interface TaxiService {
 	public Taxi createTaxi();
 
 	public Taxi login(Long taxiId, String password)
-			throws InstanceNotFoundException;
+			throws InstanceNotFoundException, Exception;
 
 	public void updateActualStateTaxi(Long taxiId, TaxiState actualState)
 			throws InstanceNotFoundException;

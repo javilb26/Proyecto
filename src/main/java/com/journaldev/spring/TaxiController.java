@@ -111,7 +111,7 @@ public class TaxiController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	public Taxi login(@RequestBody Taxi taxi) throws InstanceNotFoundException {
+	public Taxi login(@RequestBody Taxi taxi) throws InstanceNotFoundException, Exception {
 		return this.taxiService.login(taxi.getTaxiId(), taxi.getPassword());
 	}
 

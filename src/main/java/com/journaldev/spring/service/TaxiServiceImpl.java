@@ -82,11 +82,13 @@ public class TaxiServiceImpl implements TaxiService {
 	@Override
 	@Transactional(readOnly = true)
 	public Taxi login(Long taxiId, String password)
-			throws InstanceNotFoundException {
+			throws Exception {
 		Taxi taxi = taxiDao.find(taxiId);
+		System.out.println("Password: " + password);
+		System.out.println("taxi.getPassword: " + taxi.getPassword());
 		if (password.compareTo(taxi.getPassword()) != 0) {
 			System.out.println("IncorrectPasswordException");
-			return null;
+			throw new Exception("Incorrect Password");
 		}
 		return taxi;
 	}
