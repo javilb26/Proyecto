@@ -42,6 +42,7 @@ public class Taxi {
 	public Taxi() {
 		this.actualState = TaxiState.OFF;
 		this.futureState = TaxiState.OFF;
+		this.password = "";
 	}
 
 	@Id

@@ -86,4 +86,8 @@ public interface TaxiService {
 
 	public void locateTaxi(Long taxiId) throws InstanceNotFoundException;
 
+	public Boolean changePassword(Long taxiId, String password) throws InstanceNotFoundException;
+	
+	public Boolean changeCity(Long taxiId, Long cityId) throws InstanceNotFoundException;
+
 }

@@ -353,5 +353,15 @@ public class TaxiController {
 			throws InstanceNotFoundException {
 		this.taxiService.locateTaxi(taxiId);
 	}
+	//POST ya que put no permite el envio de caracteres especiales
+	@RequestMapping(value = "/changepassword", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	public Boolean changePassword(@RequestBody Taxi taxi) throws InstanceNotFoundException {
+		return this.taxiService.changePassword(taxi.getTaxiId(), taxi.getPassword());
+	}
+	
+	@RequestMapping(value = "/taxis/{taxiId}/city/{cityId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	public Boolean changeCity(@PathVariable("taxiId") Long taxiId, @PathVariable("cityId") Long cityId) throws InstanceNotFoundException {
+		return this.taxiService.changeCity(taxiId, cityId);
+	}
 
 }

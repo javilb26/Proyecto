@@ -81,13 +81,12 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Taxi login(Long taxiId, String password)
-			throws Exception {
+	public Taxi login(Long taxiId, String password) throws Exception {
 		Taxi taxi = taxiDao.find(taxiId);
 		String password2 = password.trim();
 		System.out.println("Password2: " + password2);
 		System.out.println("taxi.getPassword: " + taxi.getPassword());
-		
+
 		if (password2.compareTo(taxi.getPassword()) != 0) {
 			System.out.println("IncorrectPasswordException");
 			throw new Exception("Incorrect Password");
@@ -195,7 +194,8 @@ public class TaxiServiceImpl implements TaxiService {
 			if (s != null) {
 				address = s.getAddress();
 			} else {
-				long addressIdAux = addressDao.getNearestAddress(taxi.getPosition());
+				long addressIdAux = addressDao.getNearestAddress(taxi
+						.getPosition());
 				address = addressDao.find(addressIdAux);
 			}
 			City city = address.getCity();
@@ -345,6 +345,28 @@ public class TaxiServiceImpl implements TaxiService {
 		this.taxiDao.save(taxi);
 		Entry entry = new Entry(taxi, nearestStand, Calendar.getInstance());
 		this.entryDao.save(entry);
+	}
+
+	@Override
+	public Boolean changePassword(Long taxiId, String password)
+			throws InstanceNotFoundException {
+		boolean done = false;
+		Taxi taxi = taxiDao.find(taxiId);
+		String password2 = password.trim();
+		taxi.setPassword(password2);
+		done = true;
+		return done;
+	}
+	
+	@Override
+	public Boolean changeCity(Long taxiId, Long cityId)
+			throws InstanceNotFoundException {
+		boolean done = false;
+		Taxi taxi = taxiDao.find(taxiId);
+		City city = cityDao.find(cityId);
+		taxi.setCity(city);
+		done = true;
+		return done;
 	}
 
 }
