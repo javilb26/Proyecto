@@ -36,7 +36,6 @@ public class Taxi {
 	@JsonIgnore
 	private Set<FutureTravel> futureTravels = new HashSet<FutureTravel>();
 	private Client client;
-	@JsonIgnore
 	private City city;
 	
 	public Taxi() {

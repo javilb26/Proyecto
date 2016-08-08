@@ -359,7 +359,7 @@ public class TaxiController {
 		return this.taxiService.changePassword(taxi.getTaxiId(), taxi.getPassword());
 	}
 	
-	@RequestMapping(value = "/taxis/{taxiId}/city/{cityId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/taxis/{taxiId}/cities/{cityId}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	public Boolean changeCity(@PathVariable("taxiId") Long taxiId, @PathVariable("cityId") Long cityId) throws InstanceNotFoundException {
 		return this.taxiService.changeCity(taxiId, cityId);
 	}
