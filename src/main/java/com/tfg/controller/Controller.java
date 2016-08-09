@@ -1,4 +1,4 @@
-package com.tfg;
+package com.tfg.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -40,14 +40,14 @@ import com.vividsolutions.jts.io.WKTReader;
 
 @CrossOrigin
 @RestController
-public class TaxiController {
+public class Controller {
 
 	private TaxiService taxiService;
 	private CentralService centralService;
 	GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(),
 			4326);
 
-	Logger LOG = LoggerFactory.getLogger(TaxiController.class);
+	Logger LOG = LoggerFactory.getLogger(Controller.class);
 
 	@Autowired(required = true)
 	@Qualifier(value = "taxiService")
