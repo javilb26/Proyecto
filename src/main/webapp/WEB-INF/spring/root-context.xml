@@ -22,9 +22,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 
-	<context:component-scan base-package="com.journaldev.spring" />
-	
-	
+	<context:component-scan base-package="com.tfg" />
 	
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
@@ -45,16 +43,16 @@
 		<beans:property name="dataSource" ref="dataSourceProxy" />
 		<beans:property name="annotatedClasses">
 			<beans:list>
-				<beans:value>com.journaldev.spring.model.Address</beans:value>
-				<beans:value>com.journaldev.spring.model.City</beans:value>
-				<beans:value>com.journaldev.spring.model.Client</beans:value>
-				<beans:value>com.journaldev.spring.model.Country</beans:value>
-				<beans:value>com.journaldev.spring.model.Entry</beans:value>
-				<beans:value>com.journaldev.spring.model.FutureTravel</beans:value>
-				<beans:value>com.journaldev.spring.model.Region</beans:value>
-				<beans:value>com.journaldev.spring.model.Stand</beans:value>
-				<beans:value>com.journaldev.spring.model.Taxi</beans:value>
-				<beans:value>com.journaldev.spring.model.Travel</beans:value>
+				<beans:value>com.tfg.model.Address</beans:value>
+				<beans:value>com.tfg.model.City</beans:value>
+				<beans:value>com.tfg.model.Client</beans:value>
+				<beans:value>com.tfg.model.Country</beans:value>
+				<beans:value>com.tfg.model.Entry</beans:value>
+				<beans:value>com.tfg.model.FutureTravel</beans:value>
+				<beans:value>com.tfg.model.Region</beans:value>
+				<beans:value>com.tfg.model.Stand</beans:value>
+				<beans:value>com.tfg.model.Taxi</beans:value>
+				<beans:value>com.tfg.model.Travel</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
