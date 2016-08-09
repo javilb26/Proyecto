@@ -158,6 +158,12 @@ public class CentralServiceImpl implements CentralService {
 		client = this.clientDao.getFirstClient();
 		Taxi taxi;
 		taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
+		//Si no hay taxis en la zona (ni andando ni en una parada) quitamos al cliente
+		while (taxi==null) {
+			this.clientDao.remove(client.getClientId());
+			client = this.clientDao.getFirstClient();
+			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
+		}
 		System.out.println("1-" + client.getLocation().toText());
 		System.out.println("2-" + taxi.getTaxiId());
 		System.out.println("3-" + taxi.getToken());
