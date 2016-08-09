@@ -51,8 +51,6 @@ public class Address {
 		this.name = name;
 	}
 
-	//@JsonSerialize(using = GeometrySerializer.class)
-	//@JsonDeserialize(using = GeometryDeserializer.class)
 	@Column(columnDefinition = "geometry(MultiLineString,4326)")
 	public MultiLineString getLocation() {
 		return location;

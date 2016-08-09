@@ -212,7 +212,6 @@ public class TaxiController {
 	@RequestMapping(value = "/destination", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public void destinationReached(@RequestBody Map<String, Object> map)
 			throws InstanceNotFoundException {
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		double oY = (Double) map.get("oY");
 		double oX = (Double) map.get("oX");
 		double dY = (Double) map.get("dY");
@@ -221,30 +220,20 @@ public class TaxiController {
 		long travelId = travelIdInt.longValue();
 		String path = (String) map.get("path");
 		double distance = (Double) map.get("distance");
-		System.out.println("oY: " + oY);
-		System.out.println("travelId: " + travelId);
-		System.out.println("path: " + path);
-		System.out.println("distance: " + distance);
 		Point originPoint = geometryFactory.createPoint(new Coordinate(oY, oX));
 		Point destinationPoint = geometryFactory.createPoint(new Coordinate(dY,
 				dX));
 		WKTReader wktReader = new WKTReader();
 		LineString mlsPath;
 		try {
-			System.out.println("111111111111111");
 			mlsPath = (LineString) wktReader.read(path);
 			mlsPath.setSRID(4326);
-			System.out.println("222222222222222222");
 		} catch (ParseException e) {
-			System.out.println("333333333333333333333");
 			mlsPath = null;
 		}
-		System.out.println("44444444444444");
 		this.taxiService.destinationReached(travelId, distance, originPoint,
 				destinationPoint, mlsPath);
 	}
-
-	// Iteracion 3
 
 	@RequestMapping(value = "/taxis/{taxiId}/travels", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Travel> getTravels(

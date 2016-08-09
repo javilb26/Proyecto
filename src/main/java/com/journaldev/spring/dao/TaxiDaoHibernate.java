@@ -42,7 +42,6 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 	@Override
 	public Taxi getNearestAvailableTaxi(Point position) throws Exception {
 		City c = (City) getSession().createQuery("SELECT c FROM City c WHERE ST_Contains(c.location, :position) = true").setParameter("position", position).uniqueResult();
-		System.out.println("---------------> Ciudad 1: " + c.getCityId());
 		MultiPolygon location = c.getLocation();
 		Taxi t = (Taxi) getSession()
 				.createQuery(
@@ -51,15 +50,12 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 		Double distanceToTaxi = (double) 999999999;
 		if (t!=null) {
 			Long taxiId = t.getTaxiId();
-			System.out.println("---------------> Taxi: " + t.getTaxiId());
 			distanceToTaxi = (Double) getSession()
 					.createSQLQuery(
 							"SELECT ST_Distance(:position, t.position) as distance FROM Taxi t WHERE t.taxiId = :taxiId").addScalar("distance").setParameter("position", position).setParameter("taxiId", taxiId).uniqueResult();
-			System.out.println("---------------> Distance to taxi: " + distanceToTaxi);
 		}
 		
 		Long cityId = c.getCityId();
-		System.out.println("---------------> Ciudad 2: " + cityId);
 		List<Stand> stands = (List<Stand>) getSession()
 				.createQuery(
 						"SELECT s FROM Stand s JOIN Address a ON s.address.addressId = a.addressId JOIN City c ON a.city.cityId = c.cityId "
@@ -73,34 +69,26 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 				for (Entry entry: entries) {
 					if (entry.getTaxi().getActualState().compareTo(TaxiState.INSTAND)==0) {
 						standId = aux.getStandId();
-						System.out.println("---------------> Stand: " + standId);
 					}
 				}
 			}
 		}
 		Double distanceToStand;
 		if (standId==0) {
-			System.out.println("---------------> No taxi in any stand");
 			distanceToStand = (double) 999999999;
-			System.out.println("---------------> distanceToStand: "+distanceToStand);
 		} else {
 			distanceToStand = (Double) getSession()
 					.createSQLQuery(
 							"SELECT ST_Distance(:position, s.location) as distance FROM Stand s WHERE s.standId = :standId").addScalar("distance").setParameter("position", position).setParameter("standId", standId).uniqueResult();
-			System.out.println("Distance to stand: " + distanceToStand);
 		}
 		if (distanceToTaxi < distanceToStand) {
-			System.out.println("---------------> Entro por 1");
 			return t;
 		} else  if (distanceToTaxi > distanceToStand){
-			System.out.println("---------------> Entro por 2");
 			Taxi taxiFromStand = (Taxi) getSession()
 			.createQuery(
 					"SELECT e.taxi FROM Entry e WHERE e.stand.standId = :standId").setParameter("standId", standId).setMaxResults(1).uniqueResult();
 			return taxiFromStand;
 		} else {
-			//System.out.println("---------------> Entro por 3");
-			//throw new Exception("No taxi available and no taxi in stand");
 			return null;
 		}
 	}

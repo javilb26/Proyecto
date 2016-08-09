@@ -164,11 +164,6 @@ public class CentralServiceImpl implements CentralService {
 			client = this.clientDao.getFirstClient();
 			taxi = this.taxiDao.getNearestAvailableTaxi(client.getLocation());
 		}
-		System.out.println("1-" + client.getLocation().toText());
-		System.out.println("2-" + taxi.getTaxiId());
-		System.out.println("3-" + taxi.getToken());
-		System.out.println("4-" + client.getClientId());
-		System.out.println("5-" + client.getOriginCountry().getName());
 		return new TaxiClientDto(taxi.getTaxiId(), taxi.getToken(),
 				client.getClientId(), client.getOriginCountry().getName(),
 				client.getOriginRegion().getName(), client.getOriginCity()
@@ -198,7 +193,6 @@ public class CentralServiceImpl implements CentralService {
 			Stand s = standDao.getStandWhereTaxiIs(taxiId);
 			if (s!=null) {
 				Entry entry = s.getEntries().iterator().next();
-				System.out.println("Entry to delete: " + entry.getEntryId());
 				this.entryDao.remove(entry.getEntryId());
 			}
 		}

@@ -84,11 +84,8 @@ public class TaxiServiceImpl implements TaxiService {
 	public Taxi login(Long taxiId, String password) throws Exception {
 		Taxi taxi = taxiDao.find(taxiId);
 		String password2 = password.trim();
-		System.out.println("Password2: " + password2);
-		System.out.println("taxi.getPassword: " + taxi.getPassword());
 
 		if (password2.compareTo(taxi.getPassword()) != 0) {
-			System.out.println("IncorrectPasswordException");
 			throw new Exception("Incorrect Password");
 		}
 		return taxi;
@@ -103,7 +100,6 @@ public class TaxiServiceImpl implements TaxiService {
 		Stand s = standDao.getStandWhereTaxiIs(taxiId);
 		if (s != null) {
 			Entry entry = s.getEntries().iterator().next();
-			System.out.println("Entry to delete: " + entry.getEntryId());
 			this.entryDao.remove(entry.getEntryId());
 		}
 	}
@@ -206,7 +202,6 @@ public class TaxiServiceImpl implements TaxiService {
 			this.clientDao.save(client);
 			if (s != null) {
 				Entry entry = s.getEntries().iterator().next();
-				System.out.println("Entry to delete: " + entry.getEntryId());
 				this.entryDao.remove(entry.getEntryId());
 			}
 		} else {
@@ -232,7 +227,6 @@ public class TaxiServiceImpl implements TaxiService {
 	public void destinationReached(Long travelId, double distance,
 			Point originPoint, Point destinationPoint, LineString path)
 			throws InstanceNotFoundException {
-		System.out.println("55555555555555");
 		Travel travel = travelDao.find(travelId);
 		Taxi taxi = travel.getTaxi();
 		taxi.setActualState(taxi.getFutureState());
@@ -244,7 +238,6 @@ public class TaxiServiceImpl implements TaxiService {
 		clientDao.remove(taxi.getClient().getClientId());
 		taxi.setClient(null);
 		this.taxiDao.save(taxi);
-		System.out.println("6666666666666");
 	}
 
 	@Override
