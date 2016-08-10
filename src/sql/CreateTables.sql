@@ -170,6 +170,9 @@ SET city = (SELECT cityId
 			FROM City
 			WHERE ST_WITHIN(Address.location, City.location)=TRUE);
 
+ALTER TABLE standoverpass
+    ALTER COLUMN geom TYPE geometry(Point,4326) USING ST_GeometryN(geom, 1);
+    
 INSERT INTO Stand(name, location)
 SELECT name, geom
 FROM standoverpass;

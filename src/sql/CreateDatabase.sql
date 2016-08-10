@@ -9,3 +9,7 @@ CREATE DATABASE bd_postgis
        LC_COLLATE = 'Spanish_Spain.1252'
        LC_CTYPE = 'Spanish_Spain.1252'
        CONNECTION LIMIT = -1;
+
+CREATE EXTENSION postgis
+   SCHEMA public
+   VERSION "2.1.7"
