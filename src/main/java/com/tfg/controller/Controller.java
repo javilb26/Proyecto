@@ -177,13 +177,6 @@ public class Controller {
 		return this.taxiService.getNearestStandsByTaxi(taxiId);
 	}
 
-	@RequestMapping(value = "/zones/{zoneId}/stands", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public @ResponseBody List<Stand> getStandsByZone(
-			@PathVariable("zoneId") Long zoneId)
-			throws InstanceNotFoundException {
-		return this.taxiService.getStandsByZone(zoneId);
-	}
-
 	@RequestMapping(value = "/stands/{standId}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public @ResponseBody List<Taxi> getTaxisByStand(
 			@PathVariable("standId") Long standId)

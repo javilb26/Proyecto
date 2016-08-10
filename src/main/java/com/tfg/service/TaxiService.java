@@ -46,9 +46,6 @@ public interface TaxiService {
 	public List<Address> getAddresses(Long cityId)
 			throws InstanceNotFoundException;
 
-	public List<Stand> getStandsByZone(Long zoneId)
-			throws InstanceNotFoundException;
-
 	public List<Stand> getNearestStandsByTaxi(Long taxiId)
 			throws InstanceNotFoundException;
 

@@ -160,13 +160,6 @@ public class TaxiServiceImpl implements TaxiService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Stand> getStandsByZone(Long zoneId)
-			throws InstanceNotFoundException {
-		return this.standDao.getStandsByZone(zoneId);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public List<Stand> getNearestStandsByTaxi(Long taxiId)
 			throws InstanceNotFoundException {
 		return this.standDao.getNearestStandsByTaxi(taxiId);

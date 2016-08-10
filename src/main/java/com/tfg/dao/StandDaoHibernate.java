@@ -30,15 +30,6 @@ public class StandDaoHibernate extends GenericDaoHibernate<Stand, Long>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Stand> getStandsByZone(Long zoneId) {
-		return getSession()
-				.createQuery(
-						"SELECT s FROM Stand s WHERE s.zone.zoneId = :zoneId ORDER BY s.name")
-				.setParameter("zoneId", zoneId).list();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public List<Stand> getNearestStandsByTaxi(Long taxiId) {
 		//Busco el taxi, su posicion, coges la ciudad en la que esta y miras que sea la misma que la de las paradas
 		Taxi t = (Taxi) getSession().createQuery("SELECT t FROM Taxi t WHERE t.taxiId = :taxiId").setParameter("taxiId", taxiId).uniqueResult();
