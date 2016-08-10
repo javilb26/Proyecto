@@ -194,6 +194,8 @@ public class TaxiServiceImpl implements TaxiService {
 					Calendar.getInstance(), taxi.getPosition());
 			this.clientDao.save(client);
 			if (s != null) {
+				System.out.println("Numero de paradas: " + standDao.getStands().size());
+				System.out.println("Numero de entradas en la parada: " + s.getStandId() + " -> " +s.getEntries().size());
 				Entry entry = s.getEntries().iterator().next();
 				this.entryDao.remove(entry.getEntryId());
 			}

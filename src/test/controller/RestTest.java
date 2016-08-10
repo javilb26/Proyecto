@@ -23,10 +23,12 @@ import com.tfg.model.City;
 import com.tfg.model.Client;
 import com.tfg.model.ClientState;
 import com.tfg.model.Country;
+import com.tfg.model.FutureTravel;
 import com.tfg.model.Region;
 import com.tfg.model.Stand;
 import com.tfg.model.Taxi;
 import com.tfg.model.TaxiState;
+import com.tfg.model.Travel;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
@@ -37,7 +39,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 @Transactional
 public class RestTest {
 
-	Taxi taxi1, taxi2, taxi3, taxi4;
+	Taxi taxi1, taxi2, taxi3, taxi4, taxi5;
 	Client client1, client2, client3;
 	Point pavoRealRdaOuteiro, estTrenRtnd, osRosales, matogrande, calleBarcelona;
 	double[] pavoRealRdaOuteiroCoords, estTrenRtndCoords, osRosalesCoords, matograndeCoords, calleBarcelonaCoords;
@@ -143,6 +145,7 @@ public class RestTest {
 		try {
 			taxi1.setCity(cityDao.find(6944l));
 			taxi2.setCity(cityDao.find(6944l));
+			taxi3.setCity(cityDao.find(6944l));
 		} catch (InstanceNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -152,6 +155,7 @@ public class RestTest {
 		} catch (InstanceNotFoundException e) {
 			e.printStackTrace();
 		}
+		taxi3.setPosition(pavoRealRdaOuteiro);
 	}
 
 	@Test
@@ -282,20 +286,41 @@ public class RestTest {
 		assertTrue(taxisByStand3.size()==0);
 	}
 
+	// TODO Hasta aqui no hacen falta negativas
+	
 	@Test
-	public void testTakeClientTo() {
+	public void testTakeClientToAndDestinationReached() throws InstanceNotFoundException, Exception {
+		//Calle Paraguay -> 2002
+		//Taxi 1 tiene cliente asignado
+		taxi1.setClient(client1);
+		Long viajeClienteAsignado = controller.takeClientTo(taxi1.getTaxiId(), 1l, 9l, 6944l, 2022l);
+		//Taxi 2 no tiene cliente asignado y esta en parada
+		List<Taxi> taxisByStand1 = controller.getTaxisByStand(stand1.getStandId());
+		assertTrue(taxisByStand1.size()==1);
+		//TODO El problema es que al cargar el metodo data antes de cada metodo, los ids al guardar las stand se van sumando de 3 en 3
+		Long viajeNoClienteAsignadoYParada = controller.takeClientTo(taxi2.getTaxiId(), 1l, 9l, 6944l, 2022l);
+		//Taxi 3 no tiene cliente asignado y no esta en parada
+		Long viajeNoClienteAsignadoYNoParada = controller.takeClientTo(taxi3.getTaxiId(), 1l, 9l, 6944l, 2022l);
 	}
 
 	@Test
-	public void testDestinationReached() {
+	public void testGetTravels() throws InstanceNotFoundException {
+		List<Travel> travelsTaxi1 = controller.getTravels(taxi1.getTaxiId());
+		assertTrue(travelsTaxi1.size()==1);
+		List<Travel> travelsTaxi2 = controller.getTravels(taxi2.getTaxiId());
+		assertTrue(travelsTaxi2.size()==1);
+		List<Travel> travelsTaxi3 = controller.getTravels(taxi3.getTaxiId());
+		assertTrue(travelsTaxi3.size()==1);
 	}
 
 	@Test
-	public void testGetTravels() {
-	}
-
-	@Test
-	public void testGetFutureTravels() {
+	public void testGetFutureTravels() throws InstanceNotFoundException {
+		List<FutureTravel> futureTravelsTaxi1 = controller.getFutureTravels(taxi1.getTaxiId());
+		assertTrue(futureTravelsTaxi1.size()==0);
+		List<FutureTravel> futureTravelsTaxi2 = controller.getFutureTravels(taxi2.getTaxiId());
+		assertTrue(futureTravelsTaxi2.size()==0);
+		List<FutureTravel> futureTravelsTaxi3 = controller.getFutureTravels(taxi3.getTaxiId());
+		assertTrue(futureTravelsTaxi3.size()==0);
 	}
 
 	@Test
@@ -342,5 +367,4 @@ public class RestTest {
 	public void testChangeCity() {
 	}
 
-	// TODO Y estas son solo las positivas
 }
