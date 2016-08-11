@@ -3,8 +3,10 @@ package controller;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.mapping.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -122,26 +124,10 @@ public class RestTest {
 		calleBarcelonaCoords[0] = 43.3631952;
 		calleBarcelona = geometryFactory.createPoint(new Coordinate(
 				calleBarcelonaCoords[1], calleBarcelonaCoords[0]));
-		try {
-			stand1 = new Stand();
-			stand1.setName("Os Rosales");
-			stand1.setLocation(osRosales);
-			stand1.setAddress(addressDao.find(2419l));
-			standDao.save(stand1);
-			stand2 = new Stand();
-			stand2.setName("Matogrande");
-			stand2.setLocation(matogrande);
-			stand2.setAddress(addressDao.find(2397l));
-			standDao.save(stand2);
-			stand3 = new Stand();
-			stand3.setName("Calle Barcelona");
-			stand3.setLocation(calleBarcelona);
-			stand3.setAddress(addressDao.find(2009l));
-			standDao.save(stand3);
-		} catch (InstanceNotFoundException e) {
-			e.printStackTrace();
-		}
 		stands = controller.getStands();
+		stand1 = stands.get(0);
+		stand2 = stands.get(1);
+		stand3 = stands.get(2);
 		try {
 			taxi1.setCity(cityDao.find(6944l));
 			taxi2.setCity(cityDao.find(6944l));
@@ -271,8 +257,8 @@ public class RestTest {
 		List<Taxi> taxisByStand1 = controller.getTaxisByStand(stand1.getStandId());
 		List<Taxi> taxisByStand2 = controller.getTaxisByStand(stand2.getStandId());
 		List<Taxi> taxisByStand3 = controller.getTaxisByStand(stand3.getStandId());
-		assertTrue(taxisByStand1.get(0)==taxi2);
-		assertTrue(taxisByStand2.size()==0);
+		assertTrue(taxisByStand2.get(0)==taxi2);
+		assertTrue(taxisByStand1.size()==0);
 		assertTrue(taxisByStand3.size()==0);
 	}
 
@@ -281,54 +267,84 @@ public class RestTest {
 		List<Taxi> taxisByStand1 = controller.getTaxisByStand(stand1.getStandId());
 		List<Taxi> taxisByStand2 = controller.getTaxisByStand(stand2.getStandId());
 		List<Taxi> taxisByStand3 = controller.getTaxisByStand(stand3.getStandId());
-		assertTrue(taxisByStand1.size()==1);
-		assertTrue(taxisByStand2.size()==0);
+		assertTrue(taxisByStand1.size()==0);
+		assertTrue(taxisByStand2.size()==1);
 		assertTrue(taxisByStand3.size()==0);
 	}
 
 	// TODO Hasta aqui no hacen falta negativas
 	
 	@Test
-	public void testTakeClientToAndDestinationReached() throws InstanceNotFoundException, Exception {
+	public void testTakeClientToAndDestinationReachedAndGetTravels() throws InstanceNotFoundException, Exception {
 		//Calle Paraguay -> 2002
 		//Taxi 1 tiene cliente asignado
 		taxi1.setClient(client1);
 		Long viajeClienteAsignado = controller.takeClientTo(taxi1.getTaxiId(), 1l, 9l, 6944l, 2022l);
 		//Taxi 2 no tiene cliente asignado y esta en parada
-		List<Taxi> taxisByStand1 = controller.getTaxisByStand(stand1.getStandId());
-		assertTrue(taxisByStand1.size()==1);
-		//TODO El problema es que al cargar el metodo data antes de cada metodo, los ids al guardar las stand se van sumando de 3 en 3
+		List<Taxi> taxisByStand2 = controller.getTaxisByStand(stand2.getStandId());
+		assertTrue(taxisByStand2.get(0)==taxi2);
 		Long viajeNoClienteAsignadoYParada = controller.takeClientTo(taxi2.getTaxiId(), 1l, 9l, 6944l, 2022l);
 		//Taxi 3 no tiene cliente asignado y no esta en parada
 		Long viajeNoClienteAsignadoYNoParada = controller.takeClientTo(taxi3.getTaxiId(), 1l, 9l, 6944l, 2022l);
-	}
-
-	@Test
-	public void testGetTravels() throws InstanceNotFoundException {
+		
+		HashMap<String, Object> destinationReachedMapTaxi1 = new HashMap<String, Object>();
+		destinationReachedMapTaxi1.put("oX", 43.3195407);
+		destinationReachedMapTaxi1.put("oY", -8.47164906);
+		destinationReachedMapTaxi1.put("dX", 43.3683804);
+		destinationReachedMapTaxi1.put("dY", -8.4001909);
+		destinationReachedMapTaxi1.put("travelId", viajeClienteAsignado.intValue());
+		destinationReachedMapTaxi1.put("distance", 7938.16406);
+		destinationReachedMapTaxi1.put("path", "LINESTRING(43.3195407 -8.47164906,43.31935644 -8.47169346)");
+		controller.destinationReached(destinationReachedMapTaxi1);
+		HashMap<String, Object> destinationReachedMapTaxi2 = new HashMap<String, Object>();
+		destinationReachedMapTaxi2.put("oX", 43.3195407);
+		destinationReachedMapTaxi2.put("oY", -8.47164906);
+		destinationReachedMapTaxi2.put("dX", 43.3683804);
+		destinationReachedMapTaxi2.put("dY", -8.4001909);
+		destinationReachedMapTaxi2.put("travelId", viajeNoClienteAsignadoYParada.intValue());
+		destinationReachedMapTaxi2.put("distance", 7938.16406);
+		destinationReachedMapTaxi2.put("path", "LINESTRING(43.3195407 -8.47164906,43.31935644 -8.47169346)");
+		controller.destinationReached(destinationReachedMapTaxi2);
+		HashMap<String, Object> destinationReachedMapTaxi3 = new HashMap<String, Object>();
+		destinationReachedMapTaxi3.put("oX", 43.3195407);
+		destinationReachedMapTaxi3.put("oY", -8.47164906);
+		destinationReachedMapTaxi3.put("dX", 43.3683804);
+		destinationReachedMapTaxi3.put("dY", -8.4001909);
+		destinationReachedMapTaxi3.put("travelId", viajeNoClienteAsignadoYNoParada.intValue());
+		destinationReachedMapTaxi3.put("distance", 7938.16406);
+		destinationReachedMapTaxi3.put("path", "LINESTRING(43.3195407 -8.47164906,43.31935644 -8.47169346)");
+		controller.destinationReached(destinationReachedMapTaxi3);
+		
 		List<Travel> travelsTaxi1 = controller.getTravels(taxi1.getTaxiId());
 		assertTrue(travelsTaxi1.size()==1);
+		assertTrue(travelsTaxi1.get(0).getTravelId()==viajeClienteAsignado);
 		List<Travel> travelsTaxi2 = controller.getTravels(taxi2.getTaxiId());
 		assertTrue(travelsTaxi2.size()==1);
+		assertTrue(travelsTaxi2.get(0).getTravelId()==viajeNoClienteAsignadoYParada);
 		List<Travel> travelsTaxi3 = controller.getTravels(taxi3.getTaxiId());
 		assertTrue(travelsTaxi3.size()==1);
+		assertTrue(travelsTaxi3.get(0).getTravelId()==viajeNoClienteAsignadoYNoParada);
 	}
 
 	@Test
-	public void testGetFutureTravels() throws InstanceNotFoundException {
+	public void testCreateFutureTravelAndGetFutureTravelAndCancelFutureTravel() throws Exception {
+		HashMap<String, Object> futureTravelMapTaxi1 = new HashMap<String, Object>();
+		futureTravelMapTaxi1.put("date", "29-12-2016 23:23");
+		futureTravelMapTaxi1.put("taxiId", taxi1.getTaxiId().intValue());
+		futureTravelMapTaxi1.put("originCountryId", 1);
+		futureTravelMapTaxi1.put("originRegionId", 9);
+		futureTravelMapTaxi1.put("originCityId", 6944);
+		futureTravelMapTaxi1.put("originAddressId", 1814);
+		futureTravelMapTaxi1.put("destinationCountryId", 1);
+		futureTravelMapTaxi1.put("destinationRegionId", 9);
+		futureTravelMapTaxi1.put("destinationCityId", 6944);
+		futureTravelMapTaxi1.put("destinationAddressId", 1855);
+		controller.createFutureTravel(futureTravelMapTaxi1);
 		List<FutureTravel> futureTravelsTaxi1 = controller.getFutureTravels(taxi1.getTaxiId());
+		assertTrue(futureTravelsTaxi1.size()==1);
+		controller.cancelFutureTravel(futureTravelsTaxi1.get(0).getFutureTravelId());
+		futureTravelsTaxi1 = controller.getFutureTravels(taxi1.getTaxiId());
 		assertTrue(futureTravelsTaxi1.size()==0);
-		List<FutureTravel> futureTravelsTaxi2 = controller.getFutureTravels(taxi2.getTaxiId());
-		assertTrue(futureTravelsTaxi2.size()==0);
-		List<FutureTravel> futureTravelsTaxi3 = controller.getFutureTravels(taxi3.getTaxiId());
-		assertTrue(futureTravelsTaxi3.size()==0);
-	}
-
-	@Test
-	public void testCreateFutureTravel() {
-	}
-
-	@Test
-	public void testCancelFutureTravel() {
 	}
 
 	@Test
@@ -360,11 +376,18 @@ public class RestTest {
 	}
 
 	@Test
-	public void testChangePassword() {
+	public void testChangePassword() throws InstanceNotFoundException {
+		Taxi taxi = controller.createTaxi();
+		assertTrue(taxi.getPassword().compareTo("")==0);
+		taxi.setPassword("hola");
+		assertTrue(controller.changePassword(taxi));
 	}
 
 	@Test
-	public void testChangeCity() {
+	public void testChangeCity() throws InstanceNotFoundException {
+		assertTrue(taxi1.getCity().getCityId()==6944l);
+		assertTrue(controller.changeCity(taxi1.getTaxiId(), 6908l));
+		assertTrue(taxi1.getCity().getCityId()==6908l);
 	}
 
 }

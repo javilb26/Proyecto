@@ -185,6 +185,14 @@ SET address = (SELECT addressId
 				FROM Address a 
 				WHERE ST_Distance(Stand.location, a.location) = (SELECT min(ST_Distance(Stand.location, ad.location)) FROM Address ad));
 
+-- Para pruebas: No coger desde standoverpass e introducir:
+--INSERT INTO Stand(name, location, address)
+--VALUES ('Os Rosales', '0101000020E61000004216B36F38DD20C0F2A9AD22EDAF4540', 2419);
+--INSERT INTO Stand(name, location, address)
+--VALUES ('Matogrande', '0101000020E61000001B38561811CF20C0BCC8A942A8AB4540', 2397);
+--INSERT INTO Stand(name, location, address)
+--VALUES ('Calle Barcelona', '0101000020E6100000BAD2D7987CD820C03708292E7DAE4540', 2009);
+
 -- Introducir las paradas
 --INSERT INTO Stand(name, location)
 --VALUES ('Avenida de Hércules', (SELECT ST_SetSRID(ST_MakePoint(-8.4069785,43.379142),4326)));
