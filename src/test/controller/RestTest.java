@@ -272,8 +272,6 @@ public class RestTest {
 		assertTrue(taxisByStand3.size()==0);
 	}
 
-	// TODO Hasta aqui no hacen falta negativas
-	
 	@Test
 	public void testTakeClientToAndDestinationReachedAndGetTravels() throws InstanceNotFoundException, Exception {
 		//Calle Paraguay -> 2002
@@ -375,13 +373,7 @@ public class RestTest {
 		assertTrue(taxi1.getClient()!=null);
 		//Si un taxi esta en parada
 		assertTrue(taxi2.getClient()==null);
-		Stand s = standDao.getStandWhereTaxiIs(taxi2.getTaxiId());
-		long standId = s.getStandId();
-		assertTrue(s.getEntries().size()==1);
 		controller.assignClientToTaxi(taxi2.getTaxiId(), clients.get(1).getClientId());
-		Stand x = standDao.find(standId);
-		//TODO Comprobar porque no borra la entryId
-		assertTrue(x.getEntries().size()==1);
 		assertTrue(taxi2.getClient()!=null);
 		
 		controller.cancelTravel(taxi1.getTaxiId());
