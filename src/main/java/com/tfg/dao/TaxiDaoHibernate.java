@@ -84,10 +84,15 @@ public class TaxiDaoHibernate extends GenericDaoHibernate<Taxi, Long> implements
 		if (distanceToTaxi < distanceToStand) {
 			return t;
 		} else  if (distanceToTaxi > distanceToStand){
-			Taxi taxiFromStand = (Taxi) getSession()
+			List<Taxi> taxisFromStand = (List<Taxi>) getSession()
 			.createQuery(
-					"SELECT e.taxi FROM Entry e WHERE e.stand.standId = :standId").setParameter("standId", standId).setMaxResults(1).uniqueResult();
-			return taxiFromStand;
+					"SELECT e.taxi FROM Entry e WHERE e.stand.standId = :standId").setParameter("standId", standId).list();
+			for (Taxi taxiFromStand: taxisFromStand) {
+				if (taxiFromStand.getActualState().compareTo(TaxiState.INSTAND)==0){
+					return taxiFromStand;
+				}
+			}
+			return null;
 		} else {
 			return null;
 		}

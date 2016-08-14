@@ -1,5 +1,6 @@
 package com.tfg.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -184,6 +185,7 @@ public class CentralServiceImpl implements CentralService {
 			throws InstanceNotFoundException {
 		Client client = this.clientDao.find(clientId);
 		Taxi taxi = this.taxiDao.find(taxiId);
+		Entry oldestEntry;
 		if ((client != null) && (taxi != null)) {
 			taxi.setClient(client);
 			client.setClientState(ClientState.ASSIGNED);
@@ -192,8 +194,15 @@ public class CentralServiceImpl implements CentralService {
 			this.taxiDao.save(taxi);
 			Stand s = standDao.getStandWhereTaxiIs(taxiId);
 			if (s!=null) {
-				Entry entry = s.getEntries().iterator().next();
-				this.entryDao.remove(entry.getEntryId());
+				List<Entry> entries = new ArrayList<Entry>();
+				entries.addAll(s.getEntries());
+				oldestEntry = entries.get(0);
+				for (Entry entry: entries) {
+					if (entry.getArrival().before(oldestEntry.getArrival())) {
+						oldestEntry = entry;
+					}
+				}
+				this.entryDao.remove(oldestEntry.getEntryId());
 			}
 		}
 	}

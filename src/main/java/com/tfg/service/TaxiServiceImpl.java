@@ -194,8 +194,10 @@ public class TaxiServiceImpl implements TaxiService {
 					Calendar.getInstance(), taxi.getPosition());
 			this.clientDao.save(client);
 			if (s != null) {
-				System.out.println("Numero de paradas: " + standDao.getStands().size());
-				System.out.println("Numero de entradas en la parada: " + s.getStandId() + " -> " +s.getEntries().size());
+				System.out.println("Numero de paradas: "
+						+ standDao.getStands().size());
+				System.out.println("Numero de entradas en la parada: "
+						+ s.getStandId() + " -> " + s.getEntries().size());
 				Entry entry = s.getEntries().iterator().next();
 				this.entryDao.remove(entry.getEntryId());
 			}
@@ -329,10 +331,13 @@ public class TaxiServiceImpl implements TaxiService {
 		List<Stand> stands = standDao.getNearestStandsByTaxi(taxiId);
 		Stand nearestStand = stands.get(0);
 		Taxi taxi = taxiDao.find(taxiId);
-		taxi.setActualState(TaxiState.INSTAND);
-		this.taxiDao.save(taxi);
-		Entry entry = new Entry(taxi, nearestStand, Calendar.getInstance());
-		this.entryDao.save(entry);
+		if (taxi.getActualState().compareTo(TaxiState.INSTAND) == 0) {
+		} else {
+			taxi.setActualState(TaxiState.INSTAND);
+			this.taxiDao.save(taxi);
+			Entry entry = new Entry(taxi, nearestStand, Calendar.getInstance());
+			this.entryDao.save(entry);
+		}
 	}
 
 	@Override
@@ -345,7 +350,7 @@ public class TaxiServiceImpl implements TaxiService {
 		done = true;
 		return done;
 	}
-	
+
 	@Override
 	public Boolean changeCity(Long taxiId, Long cityId)
 			throws InstanceNotFoundException {
